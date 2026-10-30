@@ -1,40 +1,79 @@
 # Eleições FIC MVC — Exercícios 1 e 2
 
-Projeto didático baseado no PDF da aula UC01 - MVC. Usa Node.js, Express, ES Modules, classes, arquitetura MVC e EJS.
+Projeto didático desenvolvido para a disciplina de Node.js (UC01 - Padrão MVC). Utiliza **Node.js**, **Express**, **ES Modules (`import`/`export`)**, **arquitetura MVC** e **EJS** para renderização de views.
 
-## Como executar
+## 1. Como instalar e executar
 
-1. Instale o Node.js.
-2. Abra esta pasta no VS Code.
-3. No terminal, execute:
+1. Certifique-se de ter o **Node.js** instalado.
+2. No terminal, entre na pasta do projeto e instale as dependências:
 
 ```bash
+cd eleicoes-fic-mvc
 npm install
 npm start
 ```
 
-4. Acesse `http://localhost:3000`.
+*(Observação: você também pode executar `npm start` diretamente na pasta raiz do repositório).*
 
-O projeto usa armazenamento em memória, sem banco de dados. Os candidatos de exemplo e os votos são reiniciados quando o servidor é encerrado.
+3. Com o servidor iniciado, acesse no navegador:
+   - Página de Candidatos (EJS): `http://localhost:3000/candidatos`
+   - Página de Votos (EJS): `http://localhost:3000/votos`
+   - API JSON de Candidatos: `http://localhost:3000/api/candidatos`
+   - API JSON de Votos: `http://localhost:3000/api/votos`
 
-## Exercício 1 — API REST (JSON)
+O projeto utiliza armazenamento em memória (arrays estáticos nos Models), conforme solicitado na atividade de MVC, sem dependência obrigatória de banco de dados externo.
 
-Todas as rotas `/api` retornam JSON.
+---
 
-| Método | Rota | Função |
+## 2. Estrutura MVC do Projeto
+
+```text
+eleicoes-fic-mvc/
+├── public/
+│   └── style.css                     # Estilos das páginas EJS
+├── src/
+│   ├── models/
+│   │   ├── Candidato.js              # Regras e dados de candidatos (CRUD em memória)
+│   │   └── Voto.js                   # Regras, contagem e registro de votos
+│   ├── controllers/
+│   │   ├── candidatoController.js    # Validações, respostas JSON e renderização de candidatos.ejs
+│   │   └── votoController.js         # Validações, respostas JSON e renderização de votos.ejs
+│   ├── routes/
+│   │   ├── candidatoRoutes.js        # Rotas REST de candidatos (/api/candidatos)
+│   │   ├── votoRoutes.js             # Rotas REST de votos (/api/votos)
+│   │   └── viewRoutes.js             # Rotas das páginas EJS (/candidatos e /votos)
+│   └── views/
+│       ├── partials/
+│       │   ├── header.ejs            # Cabeçalho e menu de navegação
+│       │   └── footer.ejs            # Rodapé padrão
+│       ├── candidatos.ejs            # Página EJS de listagem e votação rápida de candidatos
+│       └── votos.ejs                 # Página EJS de listagem e formulário de votos
+├── client.http                       # Requisições prontas para teste (REST Client)
+├── index.js                          # Configuração do Express, middlewares, EJS e rotas
+├── server.js                         # Inicialização do servidor HTTP na porta 3000
+└── package.json                      # Configuração do projeto e ES Modules ("type": "module")
+```
+
+---
+
+## 3. Exercício 1 — API REST (JSON)
+
+Todas as rotas `/api` retornam respostas em formato **JSON** com os códigos de status HTTP adequados (`200`, `201`, `400`, `404`, `409`).
+
+| Método | Rota | Descrição |
 |---|---|---|
-| GET | `/api/candidatos` | Lista todos os candidatos |
-| GET | `/api/candidatos/:id` | Busca um candidato |
-| POST | `/api/candidatos` | Cria um candidato |
-| PUT | `/api/candidatos/:id` | Atualiza os dados do candidato |
-| PATCH | `/api/candidatos/:id` | Atualiza parcialmente os dados do candidato |
-| DELETE | `/api/candidatos/:id` | Exclui um candidato |
-| GET | `/api/votos` | Lista todos os votos |
-| POST | `/api/votos` | Registra um voto |
+| `GET` | `/api/candidatos` | Lista todos os candidatos e seus totais de votos |
+| `GET` | `/api/candidatos/:id` | Consulta um candidato específico pelo ID |
+| `POST` | `/api/candidatos` | Cadastra um novo candidato |
+| `PUT` | `/api/candidatos/:id` | Atualiza os dados de um candidato |
+| `PATCH` | `/api/candidatos/:id` | Atualiza parcialmente os dados de um candidato |
+| `DELETE` | `/api/candidatos/:id` | Exclui um candidato (desde que não possua votos) |
+| `GET` | `/api/votos` | Lista todos os votos registrados |
+| `POST` | `/api/votos` | Registra um novo voto para um candidato existente |
 
-### Exemplo: criar candidato
+### Exemplo: criar candidato (`POST /api/candidatos`)
 
-Envie `POST /api/candidatos` com o cabeçalho `Content-Type: application/json` e corpo:
+Cabeçalho: `Content-Type: application/json`
 
 ```json
 {
@@ -44,9 +83,21 @@ Envie `POST /api/candidatos` com o cabeçalho `Content-Type: application/json` e
 }
 ```
 
-### Exemplo: registrar voto
+### Exemplo: atualizar candidato (`PUT /api/candidatos/1`)
 
-Envie `POST /api/votos` com:
+Cabeçalho: `Content-Type: application/json`
+
+```json
+{
+  "nome": "Ana Costa Atualizada",
+  "partido": "Partido da Educação",
+  "numero": 11
+}
+```
+
+### Exemplo: registrar voto (`POST /api/votos`)
+
+Cabeçalho: `Content-Type: application/json`
 
 ```json
 {
@@ -54,24 +105,15 @@ Envie `POST /api/votos` com:
 }
 ```
 
-O voto só é registrado se o candidato existir. Para manter a consistência dos dados, não é possível excluir um candidato que já recebeu votos (resposta HTTP 409).
+> **Regras de validação implementadas:**
+> - Não é permitido cadastrar dois candidatos com o mesmo número (`HTTP 409`).
+> - O voto só é registrado se o `candidatoId` pertencer a um candidato existente (`HTTP 404` caso não exista).
+> - Não é permitido excluir um candidato que já recebeu votos (`HTTP 409`).
 
-## Exercício 2 — Views EJS
+---
 
-- `GET /candidatos`: renderiza a view `src/views/candidatos.ejs`.
-- `GET /votos`: renderiza a view `src/views/votos.ejs`.
+## 4. Exercício 2 — Views com EJS
 
-As views usam dados dos Models e apresentam páginas HTML. As rotas da API continuam retornando JSON.
+- `GET /candidatos`: acionada pelo `CandidatoController.renderizarPagina`, renderiza `src/views/candidatos.ejs` exibindo os cartões de cada candidato, número, partido, ID, total de votos recebidos e botão para votar.
+- `GET /votos`: acionada pelo `VotoController.renderizarPagina`, renderiza `src/views/votos.ejs` exibindo o formulário para registrar voto e a tabela com todos os votos computados.
 
-## Estrutura MVC
-
-- `src/models/`: classes `Candidato` e `Voto`, responsáveis pelos dados.
-- `src/controllers/`: recebe as requisições, valida os dados e coordena a operação.
-- `src/routes/`: define os caminhos HTTP.
-- `src/views/`: páginas EJS do exercício 2.
-- `index.js`: configura Express, middlewares e rotas.
-- `server.js`: inicia o servidor.
-
-## Observação sobre os dados
-
-O enunciado não especifica os campos dos candidatos e votos. Para este exemplo, cada candidato possui `id`, `nome`, `partido` e `numero`; cada voto possui `id`, `candidatoId` e `data`. Os nomes e partidos iniciais são fictícios e servem apenas para demonstrar o funcionamento.

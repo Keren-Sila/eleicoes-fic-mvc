@@ -11,14 +11,23 @@
   <div class="grade">
     <% candidatos.forEach(candidato => { %>
       <article class="cartao">
-        <div class="numero">Nº <%= candidato.numero %></div>
+        <div class="cartao-topo">
+          <span class="numero">Nº <%= candidato.numero %></span>
+          <span class="placar"><%= candidato.totalVotos || 0 %> <%= (candidato.totalVotos === 1) ? 'voto' : 'votos' %></span>
+        </div>
         <h2><%= candidato.nome %></h2>
         <p><%= candidato.partido %></p>
-        <small>ID: <%= candidato.id %></small>
+        <div class="cartao-rodape">
+          <small>ID: <%= candidato.id %></small>
+          <form action="/votos" method="POST">
+            <input type="hidden" name="candidatoId" value="<%= candidato.id %>">
+            <button type="submit" class="botao-votar">Votar</button>
+          </form>
+        </div>
       </article>
     <% }) %>
   </div>
 <% } %>
 
-<p class="dica">Para cadastrar, alterar ou excluir candidatos, utilize os endpoints da API descritos no README.</p>
+<p class="dica">Para cadastrar, alterar ou excluir candidatos via API REST, utilize os endpoints descritos no README ou no arquivo <code>client.http</code>.</p>
 <%- include('partials/footer') %>

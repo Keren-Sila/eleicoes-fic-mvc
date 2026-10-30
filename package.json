@@ -1,0 +1,10 @@
+{
+  "name": "eleicoes-fic-mvc-completo",
+  "version": "1.0.0",
+  "description": "Projeto Eleições FIC MVC - Node.js, Express, ES Modules e EJS",
+  "type": "module",
+  "scripts": {
+    "start": "node ./eleicoes-fic-mvc/server.js",
+    "dev": "node --watch ./eleicoes-fic-mvc/server.js"
+  }
+}

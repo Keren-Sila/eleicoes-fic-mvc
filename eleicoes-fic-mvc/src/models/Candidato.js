@@ -10,7 +10,11 @@ export default class Candidato {
   }
 
   static buscarPorId(id) {
-    return this.dados.find(candidato => candidato.id === Number(id));
+    return this.dados.find(candidato => candidato.id === Number(id)) || null;
+  }
+
+  static buscarPorNumero(numero) {
+    return this.dados.find(candidato => candidato.numero === Number(numero)) || null;
   }
 
   static criar(dados) {
@@ -20,8 +24,8 @@ export default class Candidato {
 
     const candidato = {
       id: novoId,
-      nome: dados.nome.trim(),
-      partido: dados.partido.trim(),
+      nome: String(dados.nome).trim(),
+      partido: String(dados.partido).trim(),
       numero: Number(dados.numero)
     };
 

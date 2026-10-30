@@ -2,25 +2,48 @@
 <section class="cabecalho">
   <p class="etiqueta">VISUALIZAÇÃO MVC</p>
   <h1>Todos os votos</h1>
-  <p>Registros de votos feitos nesta execução do servidor.</p>
+  <p>Registros de votos feitos nesta execução do servidor (Total: <strong><%= votos.length %></strong>).</p>
 </section>
+
+<% if (typeof candidatos !== 'undefined' && candidatos.length > 0) { %>
+  <section class="painel-voto">
+    <form class="form-voto" action="/votos" method="POST">
+      <label for="candidatoId">Registrar novo voto:</label>
+      <select id="candidatoId" name="candidatoId" required>
+        <% candidatos.forEach(candidato => { %>
+          <option value="<%= candidato.id %>">Nº <%= candidato.numero %> — <%= candidato.nome %> (<%= candidato.partido %>)</option>
+        <% }) %>
+      </select>
+      <button type="submit" class="botao-votar">Confirmar voto</button>
+    </form>
+  </section>
+<% } %>
 
 <% if (votos.length === 0) { %>
   <div class="vazio">
     Ainda não há votos registrados.<br>
-    <span>Você pode criar um voto usando POST /api/votos.</span>
+    <span>Você pode registrar um voto pelo formulário acima ou usando <code>POST /api/votos</code>.</span>
   </div>
 <% } else { %>
   <div class="tabela-wrap">
     <table>
       <thead>
-        <tr><th>ID do voto</th><th>Candidato</th><th>ID do candidato</th><th>Data</th></tr>
+        <tr>
+          <th>ID do voto</th>
+          <th>Candidato</th>
+          <th>Número</th>
+          <th>Partido</th>
+          <th>ID do candidato</th>
+          <th>Data e hora</th>
+        </tr>
       </thead>
       <tbody>
         <% votos.forEach(voto => { %>
           <tr>
-            <td><%= voto.id %></td>
-            <td><%= voto.candidatoNome %></td>
+            <td>#<%= voto.id %></td>
+            <td><strong><%= voto.candidatoNome %></strong></td>
+            <td>Nº <%= voto.candidatoNumero %></td>
+            <td><%= voto.candidatoPartido %></td>
             <td><%= voto.candidatoId %></td>
             <td><%= voto.dataFormatada %></td>
           </tr>

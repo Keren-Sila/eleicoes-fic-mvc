@@ -11,10 +11,10 @@
   <div class="container nav">
     <a class="marca" href="/candidatos">Eleições FIC</a>
     <nav>
-      <a href="/candidatos">Candidatos</a>
-      <a href="/votos">Votos</a>
-      <a href="/api/candidatos">API de candidatos</a>
-      <a href="/api/votos">API de votos</a>
+      <a class="<%= titulo === 'Candidatos' ? 'ativo' : '' %>" href="/candidatos">Candidatos</a>
+      <a class="<%= titulo === 'Votos' ? 'ativo' : '' %>" href="/votos">Votos</a>
+      <a href="/api/candidatos" target="_blank">API de candidatos</a>
+      <a href="/api/votos" target="_blank">API de votos</a>
     </nav>
   </div>
 </header>
