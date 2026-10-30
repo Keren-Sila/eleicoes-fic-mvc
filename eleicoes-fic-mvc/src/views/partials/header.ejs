@@ -3,25 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= titulo %> | Justiça Eleitoral — Eleições FIC</title>
-  <link rel="stylesheet" href="/style.css?v=5">
+  <title><%= titulo %> | Simulador de Urna Eletrônica — Eleições FIC</title>
+  <link rel="stylesheet" href="/style.css?v=12">
 </head>
-<body>
+<body id="corpoPagina">
 <header class="topo">
-  <div class="container nav">
+  <div class="container topo-inner">
     <a class="marca" href="/candidatos">
-      <span class="marca-icone" aria-hidden="true">⚖️</span>
-      <span class="marca-texto">
-        <strong>JUSTIÇA ELEITORAL</strong>
-        <small>Sistema Eleições FIC • Padrão MVC</small>
+      <span class="marca-quadrado" aria-hidden="true">⚖️</span>
+      <span class="marca-textos">
+        <strong>Simulador de Urna Eletrônica</strong>
+        <small>Treinamento de votação · Eleições FIC (MVC)</small>
       </span>
     </a>
-    <nav>
-      <a class="<%= titulo === 'Candidatos' ? 'ativo' : '' %>" href="/candidatos">Urna &amp; Candidatos</a>
-      <a class="<%= titulo === 'Votos' ? 'ativo' : '' %>" href="/votos">Boletim de Votos</a>
-      <a class="link-api" href="/api/candidatos" target="_blank">API Candidatos</a>
-      <a class="link-api" href="/api/votos" target="_blank">API Votos</a>
+
+    <nav class="menu-abas">
+      <a class="aba-item <%= titulo === 'Candidatos' ? 'ativa' : '' %>" href="/candidatos">Urna &amp; Candidatos</a>
+      <a class="aba-item <%= titulo === 'Votos' ? 'ativa' : '' %>" href="/votos">Boletim de votos</a>
+      <a class="aba-item" href="/api/candidatos" target="_blank">API Candidatos</a>
+      <a class="aba-item" href="/api/votos" target="_blank">API Votos</a>
+
+      <div class="alternador-tema" role="group" aria-label="Alternar tema visual">
+        <button type="button" class="btn-tema ativo" id="btnVisorBranco" onclick="definirModoVisor('branco')" title="Modo Claro">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <span>Claro</span>
+        </button>
+        <button type="button" class="btn-tema" id="btnVisorPreto" onclick="definirModoVisor('preto')" title="Modo Escuro">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <span>Escuro</span>
+        </button>
+      </div>
     </nav>
   </div>
 </header>
-<main class="container">
+<main class="container conteudo-principal">

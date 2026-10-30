@@ -1,8 +1,8 @@
 export default class Candidato {
   static dados = [
-    { id: 1, nome: 'Ana Costa', partido: 'Partido da Educação', numero: 10 },
-    { id: 2, nome: 'Bruno Lima', partido: 'Partido da Saúde', numero: 20 },
-    { id: 3, nome: 'Carla Souza', partido: 'Partido da Cultura', numero: 30 }
+    { id: 1, nome: 'Ana Costa', partido: 'Partido da Educação', numero: 10, foto: '/img/ana-costa.jpg' },
+    { id: 2, nome: 'Bruno Lima', partido: 'Partido da Saúde', numero: 20, foto: '/img/bruno-lima.jpg' },
+    { id: 3, nome: 'Carla Souza', partido: 'Partido da Cultura', numero: 30, foto: '/img/carla-souza.jpg' }
   ];
 
   static listar() {
@@ -26,7 +26,8 @@ export default class Candidato {
       id: novoId,
       nome: String(dados.nome).trim(),
       partido: String(dados.partido).trim(),
-      numero: Number(dados.numero)
+      numero: Number(dados.numero),
+      foto: dados.foto ? String(dados.foto).trim() : '/img/candidato-padrao.svg'
     };
 
     this.dados.push(candidato);
@@ -40,6 +41,7 @@ export default class Candidato {
     if (dados.nome !== undefined) candidato.nome = String(dados.nome).trim();
     if (dados.partido !== undefined) candidato.partido = String(dados.partido).trim();
     if (dados.numero !== undefined) candidato.numero = Number(dados.numero);
+    if (dados.foto !== undefined) candidato.foto = String(dados.foto).trim();
 
     return candidato;
   }

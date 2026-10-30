@@ -1,145 +1,212 @@
 <%- include('partials/header', { titulo: 'Votos' }) %>
+<%
+  const mapaFotos = { 10: '/img/ana-costa.jpg', 20: '/img/bruno-lima.jpg', 30: '/img/carla-souza.jpg' };
+  const listaCand = typeof candidatos !== 'undefined' ? candidatos : [];
+  const candOrdenados = [...listaCand].sort((a, b) => (b.totalVotos || 0) - (a.totalVotos || 0));
+  const lider = candOrdenados.length > 0 && (candOrdenados[0].totalVotos || 0) > 0 ? candOrdenados[0] : null;
+%>
 
-<!-- Barra Superior: Alternador de Visor (Branco / Preto) -->
-<div class="barra-controles-urna">
-  <div class="cola-eleitoral">
-    <span class="cola-label">Apuração Oficial:</span>
-    <span style="font-size: 0.84rem; color: #cbd5e1;">Total de <strong><%= votos.length %></strong> <%= votos.length === 1 ? 'voto registrado' : 'votos registrados' %></span>
-  </div>
-
-  <div class="seletor-visor" role="group" aria-label="Cor do visor da urna">
-    <span class="seletor-visor-label">Visor LCD:</span>
-    <button type="button" class="btn-visor ativo" id="btnVisorBranco" onclick="definirModoVisor('branco')">
-      <span class="bolinha-visor bolinha-clara"></span> Branco (Oficial)
-    </button>
-    <button type="button" class="btn-visor" id="btnVisorPreto" onclick="definirModoVisor('preto')">
-      <span class="bolinha-visor bolinha-escura"></span> Preto (Noturno)
-    </button>
-  </div>
-</div>
-
-<!-- Chassi da Urna — Modo Boletim de Urna -->
-<section class="palco-urna">
-  <div class="urna-chassi urna-chassi-boletim">
-    <div class="urna-bloco-visor">
-      <div class="visor-moldura-rebaixada">
-        <div class="visor-lcd visor-branco" id="urnaTela">
-          <div class="lcd-seu-voto">JUSTIÇA ELEITORAL • BOLETIM DE URNA</div>
-          <div class="lcd-cargo" style="margin-bottom: 14px;">TOTALIZAÇÃO — DEPUTADO FEDERAL</div>
-
-          <% if (typeof candidatos !== 'undefined' && candidatos.length > 0) { %>
-            <div class="boletim-grade">
-              <% candidatos.forEach(candidato => {
-                const qtd = candidato.totalVotos || 0;
-                const perc = votos.length > 0 ? Math.round((qtd / votos.length) * 100) : 0;
-              %>
-                <div class="boletim-item">
-                  <div class="boletim-linha-topo">
-                    <span class="boletim-num">Nº <%= candidato.numero %></span>
-                    <div class="boletim-info">
-                      <strong><%= candidato.nome %></strong>
-                      <small><%= candidato.partido %></small>
-                    </div>
-                    <div class="boletim-placar-direita">
-                      <span class="boletim-votos"><%= qtd %> <%= qtd === 1 ? 'voto' : 'votos' %></span>
-                      <span class="boletim-perc"><%= perc %>%</span>
-                    </div>
-                  </div>
-                  <div class="boletim-barra-fundo">
-                    <div class="boletim-barra-preenchimento" style="width: <%= perc %>%;"></div>
-                  </div>
-                </div>
-              <% }) %>
-            </div>
-          <% } %>
-
-          <div class="lcd-rodape-instrucoes" style="margin-top: 16px;">
-            <div class="instrucao-cabecalho">Instrução:</div>
-            <div class="instrucao-linha">Para digitar no teclado tátil da Urna Eletrônica, acesse <a href="/candidatos" class="link-urna">Urna &amp; Candidatos</a>.</div>
-          </div>
+<div class="layout-simulador">
+  <!-- COLUNA ESQUERDA: BOLETIM DE URNA — APURAÇÃO OFICIAL (DESIGN INSTITUCIONAL TSE) -->
+  <section class="card-painel bu-documento">
+    <!-- Cabeçalho Oficial do Boletim de Urna -->
+    <div class="bu-cabecalho-oficial">
+      <div class="bu-cabecalho-esq">
+        <div class="bu-brasao-circulo" aria-hidden="true">⚖️</div>
+        <div>
+          <span class="bu-orgao">JUSTIÇA ELEITORAL • TRIBUNAL REGIONAL ELEITORAL</span>
+          <h1 class="bu-titulo">Boletim de Urna — Apuração Oficial</h1>
         </div>
       </div>
-
-      <div class="urna-emboss-inferior" aria-hidden="true">
-        <span>REPÚBLICA FEDERATIVA DO BRASIL • BOLETIM DE APURAÇÃO EM MEMÓRIA</span>
+      <div class="bu-selo-status">
+        <span class="bu-ponto-status"></span>
+        APURAÇÃO EM TEMPO REAL
       </div>
     </div>
-  </div>
-</section>
 
-<!-- Seção MVC: Formulário e Tabela de Todos os Votos -->
-<section class="secao-dados">
-  <div class="cabecalho-secao">
-    <div>
-      <p class="etiqueta">PADRÃO MVC • HISTÓRICO DE AUDITORIA</p>
-      <h1>Todos os votos</h1>
-      <p class="subtitulo-secao">Registros de votos feitos nesta execução do servidor.</p>
+    <!-- Faixa de Metadados da Seção Eleitoral -->
+    <div class="bu-metadados-grade">
+      <div class="bu-meta-item">
+        <span>ZONA ELEITORAL</span>
+        <strong>0001 — FIC</strong>
+      </div>
+      <div class="bu-meta-item">
+        <span>SEÇÃO / URNA</span>
+        <strong>0042 / UE-2026</strong>
+      </div>
+      <div class="bu-meta-item">
+        <span>CARGO EM APURAÇÃO</span>
+        <strong>DEPUTADO FEDERAL</strong>
+      </div>
+      <div class="bu-meta-item">
+        <span>VOTOS COMPUTADOS</span>
+        <strong><%= votos.length %> <%= votos.length === 1 ? 'VOTO' : 'VOTOS' %></strong>
+      </div>
     </div>
-  </div>
 
-  <% if (typeof candidatos !== 'undefined' && candidatos.length > 0) { %>
-    <section class="painel-voto">
-      <form class="form-voto" action="/votos" method="POST">
-        <label for="candidatoId">Registrar voto rápido:</label>
-        <select id="candidatoId" name="candidatoId" required>
-          <% candidatos.forEach(candidato => { %>
-            <option value="<%= candidato.id %>">Nº <%= candidato.numero %> — <%= candidato.nome %> (<%= candidato.partido %>)</option>
+    <!-- Seção 1 do Boletim: Apuração Percentual por Candidato -->
+    <div class="bu-secao-interna">
+      <div class="bu-subtitulo-secao">
+        <span>RESULTADO PARCIAL POR CANDIDATO</span>
+        <span><%= lider ? ('Líder atual: ' + lider.nome) : 'Aguardando votos' %></span>
+      </div>
+
+      <% if (listaCand.length > 0) { %>
+        <div class="bu-lista-apuracao">
+          <% candOrdenados.forEach((candidato, pos) => {
+            const qtd = candidato.totalVotos || 0;
+            const perc = votos.length > 0 ? ((qtd / votos.length) * 100).toFixed(1) : '0.0';
+            const urlFoto = candidato.foto || mapaFotos[candidato.numero] || '/img/candidato-padrao.svg';
+          %>
+            <div class="bu-card-apuracao <%= pos === 0 && qtd > 0 ? 'bu-lider' : '' %>">
+              <div class="bu-cand-info">
+                <img src="<%= urlFoto %>" alt="<%= candidato.nome %>" class="bu-cand-foto">
+                <div class="bu-cand-textos">
+                  <div class="bu-cand-linha1">
+                    <span class="bu-badge-num">Nº <%= candidato.numero %></span>
+                    <strong><%= candidato.nome %></strong>
+                    <% if (pos === 0 && qtd > 0) { %>
+                      <span class="bu-tag-eleito">1º LUGAR</span>
+                    <% } %>
+                  </div>
+                  <span class="bu-cand-partido"><%= candidato.partido %> · ID #<%= candidato.id %></span>
+                </div>
+              </div>
+
+              <div class="bu-cand-metricas">
+                <div class="bu-metricas-numeros">
+                  <strong class="bu-qtd-votos"><%= qtd %> <%= qtd === 1 ? 'voto' : 'votos' %></strong>
+                  <span class="bu-perc-votos"><%= perc %>%</span>
+                </div>
+                <div class="bu-barra-progresso">
+                  <div class="bu-barra-preenchida" style="width: <%= votos.length > 0 ? Math.round((qtd / votos.length) * 100) : 0 %>%;"></div>
+                </div>
+              </div>
+            </div>
           <% }) %>
-        </select>
-        <button type="submit" class="botao-votar">CONFIRMAR VOTO</button>
-      </form>
-    </section>
-  <% } %>
-
-  <% if (votos.length === 0) { %>
-    <div class="vazio">
-      Ainda não há votos registrados.<br>
-      <span>Você pode votar pela <a href="/candidatos">Urna Eletrônica</a>, pelo formulário acima ou usando <code>POST /api/votos</code>.</span>
+        </div>
+      <% } %>
     </div>
-  <% } else { %>
-    <div class="tabela-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>ID do voto</th>
-            <th>Candidato</th>
-            <th>Número</th>
-            <th>Partido</th>
-            <th>ID do candidato</th>
-            <th>Data e hora</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% votos.forEach(voto => { %>
+
+    <!-- Seção 2 do Boletim: Registro Individual de Votos (Auditoria MVC) -->
+    <div class="bu-secao-interna" style="border-top: 1px solid var(--borda-card);">
+      <div class="bu-subtitulo-secao">
+        <span>REGISTRO DE AUDITORIA DE VOTOS (MODEL VOTO)</span>
+        <span><%= votos.length %> <%= votos.length === 1 ? 'REGISTRO' : 'REGISTROS' %></span>
+      </div>
+
+      <% if (votos.length === 0) { %>
+        <div class="bu-estado-vazio">
+          <strong>Nenhum voto registrado até o momento nesta sessão.</strong>
+          <p>Utilize a <a href="/candidatos">Urna Eletrônica</a> ou o painel rápido ao lado para registrar votos.</p>
+        </div>
+      <% } else { %>
+        <div class="bu-tabela-container">
+          <table class="tabela-candidatos">
+            <thead>
+              <tr>
+                <th>PROTOCOLO</th>
+                <th>CANDIDATO</th>
+                <th>NÚMERO</th>
+                <th>PARTIDO</th>
+                <th>ID CAND.</th>
+                <th class="col-direita">DATA E HORA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% votos.forEach(voto => { %>
+                <tr>
+                  <td><span class="bu-protocolo">#<%= String(voto.id).padStart(4, '0') %></span></td>
+                  <td><strong><%= voto.candidatoNome %></strong></td>
+                  <td><span class="bu-badge-num"><%= voto.candidatoNumero %></span></td>
+                  <td><%= voto.candidatoPartido %></td>
+                  <td><%= voto.candidatoId %></td>
+                  <td class="col-direita"><%= voto.dataFormatada %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="bu-rodape-autenticacao">
+      <span>AUTENTICAÇÃO DIGITAL MVC: <%= Buffer.from('ELEICOES-FIC-' + votos.length).toString('hex').toUpperCase() %></span>
+      <span>EMISSÃO: <%= new Date().toLocaleDateString('pt-BR') %></span>
+    </div>
+  </section>
+
+  <!-- COLUNA DIREITA: RESUMO + REGISTRO RÁPIDO DE VOTO -->
+  <aside class="coluna-lateral">
+    <section class="card-painel">
+      <div class="card-lateral-header">
+        <h2>Quadro geral</h2>
+        <span><%= listaCand.length %> candidatos</span>
+      </div>
+
+      <% if (listaCand.length > 0) { %>
+        <table class="tabela-candidatos">
+          <thead>
             <tr>
-              <td><span class="tag-id">#<%= voto.id %></span></td>
-              <td><strong><%= voto.candidatoNome %></strong></td>
-              <td><span class="tag-num">Nº <%= voto.candidatoNumero %></span></td>
-              <td><%= voto.candidatoPartido %></td>
-              <td><%= voto.candidatoId %></td>
-              <td><%= voto.dataFormatada %></td>
+              <th>Nº</th>
+              <th>NOME</th>
+              <th>PARTIDO</th>
+              <th class="col-direita">VOTOS</th>
             </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-  <% } %>
-</section>
+          </thead>
+          <tbody>
+            <% listaCand.forEach((candidato, idx) => {
+              const urlFoto = candidato.foto || mapaFotos[candidato.numero] || '/img/candidato-padrao.svg';
+            %>
+              <tr class="linha-candidato <%= idx === 0 ? 'ativa' : '' %>">
+                <td class="celula-num"><strong><%= candidato.numero %></strong></td>
+                <td class="celula-nome">
+                  <div class="nome-com-foto">
+                    <img src="<%= urlFoto %>" alt="<%= candidato.nome %>" class="avatar-tabela">
+                    <span><%= candidato.nome %></span>
+                  </div>
+                </td>
+                <td class="celula-partido"><%= candidato.partido %></td>
+                <td class="celula-votos col-direita"><strong><%= candidato.totalVotos || 0 %></strong></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+
+    <% if (listaCand.length > 0) { %>
+      <section class="card-painel">
+        <div class="card-lateral-header">
+          <h2>Registrar voto manual</h2>
+        </div>
+        <div style="padding: 16px 18px;">
+          <form action="/votos" method="POST" class="form-voto-lateral">
+            <select name="candidatoId" required class="select-voto">
+              <% listaCand.forEach(candidato => { %>
+                <option value="<%= candidato.id %>">Nº <%= candidato.numero %> — <%= candidato.nome %> (<%= candidato.partido %>)</option>
+              <% }) %>
+            </select>
+            <button type="submit" class="btn-confirmar-lateral">CONFIRMAR VOTO</button>
+          </form>
+        </div>
+      </section>
+    <% } %>
+  </aside>
+</div>
 
 <script>
-  const urnaTela = document.getElementById('urnaTela');
+  const corpoPagina = document.getElementById('corpoPagina');
   const btnVisorBranco = document.getElementById('btnVisorBranco');
   const btnVisorPreto = document.getElementById('btnVisorPreto');
 
   window.definirModoVisor = function(modo) {
     if (modo === 'preto') {
-      urnaTela.classList.remove('visor-branco');
-      urnaTela.classList.add('visor-preto');
+      corpoPagina.classList.add('tema-escuro-tse');
       btnVisorPreto.classList.add('ativo');
       btnVisorBranco.classList.remove('ativo');
     } else {
-      urnaTela.classList.remove('visor-preto');
-      urnaTela.classList.add('visor-branco');
+      corpoPagina.classList.remove('tema-escuro-tse');
       btnVisorBranco.classList.add('ativo');
       btnVisorPreto.classList.remove('ativo');
     }
