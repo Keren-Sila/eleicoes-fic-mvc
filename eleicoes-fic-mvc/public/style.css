@@ -1,24 +1,28 @@
 :root {
   color-scheme: dark;
-  --fundo: #121721;
-  --painel: #1b2230;
-  --texto: #eef2f9;
-  --suave: #9ba7be;
-  --destaque: #3b6ea5;
-  --verde-urna: #3aa655;
-  --verde-urna-hover: #2f8e47;
-  --laranja-urna: #e57a25;
-  --laranja-urna-hover: #cc6818;
-  --borda: #2c364b;
+  --fundo-escuro: #0e131b;
+  --painel-card: #171e2b;
+  --painel-card-hover: #1d2636;
+  --texto-claro: #edf2f9;
+  --texto-suave: #94a3b8;
+  --borda-sutil: #273246;
+  --azul-tse: #3e6096;
+  --verde-confirma: #359d4e;
+  --verde-confirma-escuro: #247337;
+  --laranja-corrige: #e06d1b;
+  --laranja-corrige-escuro: #a84e0d;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  background: radial-gradient(circle at 50% 18%, #2a3444 0%, #141923 55%, #0c1017 100%);
-  color: var(--texto);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(ellipse at 50% 15%, #2b3648 0%, #161d28 50%, #0b0f16 100%);
+  color: var(--texto-claro);
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
 }
 
@@ -27,18 +31,20 @@ body {
   margin: 0 auto;
 }
 
-/* Cabeçalho Superior */
+/* =========================================================
+   BARRA DE NAVEGAÇÃO SUPERIOR (INSTITUCIONAL)
+   ========================================================= */
 .topo {
-  background: rgba(15, 20, 29, 0.88);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--borda);
+  background: rgba(13, 18, 26, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--borda-sutil);
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 30;
 }
 
 .nav {
-  min-height: 68px;
+  min-height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -46,392 +52,641 @@ body {
 }
 
 .marca {
-  color: #fff;
-  font-weight: 800;
-  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   text-decoration: none;
-  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.marca-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marca-texto {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.marca-texto strong {
+  font-size: 0.98rem;
+  letter-spacing: 0.04em;
+  color: #f8fafc;
+}
+
+.marca-texto small {
+  font-size: 0.74rem;
+  color: var(--texto-suave);
+  font-weight: 500;
 }
 
 nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
+  align-items: center;
+  gap: 8px;
 }
 
 nav a {
-  color: var(--suave);
+  color: var(--texto-suave);
   text-decoration: none;
-  font-size: 0.92rem;
-  font-weight: 500;
-  padding: 6px 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 8px 14px;
   border-radius: 8px;
   transition: all 0.15s ease;
 }
 
-nav a:hover,
+nav a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
 nav a.ativo {
   color: #fff;
-  background: rgba(59, 110, 165, 0.28);
-  font-weight: 700;
+  background: var(--azul-tse);
+  box-shadow: 0 2px 10px rgba(62, 96, 150, 0.4);
+}
+
+nav a.link-api {
+  border: 1px solid var(--borda-sutil);
+  font-size: 0.8rem;
 }
 
 main {
   min-height: calc(100vh - 140px);
-  padding-top: 34px;
-  padding-bottom: 60px;
+  padding-top: 26px;
+  padding-bottom: 64px;
 }
 
 /* =========================================================
-   URNA ELETRÔNICA 3D REALISTA (Inspirada na foto enviada)
+   COLA ELEITORAL (ATALHO DE NÚMEROS NO TOPO)
+   ========================================================= */
+.cola-eleitoral {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  background: rgba(23, 30, 43, 0.85);
+  border: 1px solid var(--borda-sutil);
+  padding: 10px 18px;
+  border-radius: 999px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cola-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--texto-suave);
+}
+
+.cola-pilulas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cola-pilula {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #232e42;
+  border: 1px solid #384966;
+  color: #e2e8f0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cola-pilula strong {
+  background: var(--azul-tse);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+}
+
+.cola-pilula:hover {
+  background: #2e3d57;
+  border-color: #5673a1;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   GABINETE FÍSICO 3D DA URNA ELETRÔNICA (FIEL À FOTO)
    ========================================================= */
 .palco-urna {
   display: flex;
   justify-content: center;
-  margin-bottom: 46px;
+  margin-bottom: 52px;
 }
 
-.urna-carcaca {
-  width: min(820px, 100%);
-  background: linear-gradient(165deg, #dcdcd6 0%, #c8c8c0 55%, #b2b2aa 100%);
-  border-radius: 18px 18px 24px 24px;
-  padding: 26px 30px 32px;
+.urna-gabinete {
+  width: min(860px, 100%);
+  background: linear-gradient(170deg, #dfdfd9 0%, #cfcfc7 48%, #babab0 100%);
+  border-radius: 16px 16px 26px 26px;
+  border: 1px solid #96968c;
   box-shadow:
-    0 34px 70px rgba(0, 0, 0, 0.65),
-    0 10px 24px rgba(0, 0, 0, 0.45),
-    inset 0 2px 3px rgba(255, 255, 255, 0.75),
-    inset 0 -6px 12px rgba(70, 70, 65, 0.45);
-  border: 1px solid #9f9f96;
+    0 42px 80px rgba(0, 0, 0, 0.75),
+    0 14px 28px rgba(0, 0, 0, 0.55),
+    inset 0 2px 2px rgba(255, 255, 255, 0.85),
+    inset 0 -8px 16px rgba(68, 68, 62, 0.55),
+    -10px 14px 0 -4px #9a9a90,
+    10px 14px 0 -4px #9a9a90;
+  overflow: hidden;
   position: relative;
 }
 
-/* Moldura Escura da Tela LCD */
-.urna-moldura-tela {
-  background: linear-gradient(180deg, #3c4149 0%, #2c3037 100%);
-  padding: 18px 22px;
-  border-radius: 10px;
+.urna-chanfro-topo {
+  height: 12px;
+  background: linear-gradient(180deg, #efefe9 0%, #d4d4cc 100%);
+  border-bottom: 1px solid #b5b5ab;
+}
+
+.urna-painel-superior {
+  padding: 22px 32px 24px;
+  background: linear-gradient(180deg, #dcdcd5 0%, #c9c9c1 100%);
+}
+
+/* Moldura Preta/Grafite ao redor do LCD */
+.urna-moldura-preta {
+  background: linear-gradient(180deg, #32363d 0%, #202328 100%);
+  padding: 20px 26px;
+  border-radius: 8px;
+  border: 2px solid #17191d;
   box-shadow:
-    inset 0 4px 10px rgba(0, 0, 0, 0.75),
-    0 2px 1px rgba(255, 255, 255, 0.55);
+    inset 0 5px 14px rgba(0, 0, 0, 0.85),
+    0 2px 0 rgba(255, 255, 255, 0.65);
 }
 
-/* Tela LCD Branca/Azulada */
-.urna-tela {
-  background: linear-gradient(180deg, #f7fbff 0%, #edf4fa 100%);
-  color: #1c2430;
-  border-radius: 6px;
-  padding: 16px 20px 14px;
-  border: 2px solid #1d2228;
-  box-shadow: inset 0 0 18px rgba(170, 195, 220, 0.35);
+/* Tela LCD Interna */
+.urna-lcd {
+  background: linear-gradient(180deg, #f9fcff 0%, #eef5fb 100%);
+  color: #161d26;
+  border: 2px solid #14181f;
+  border-radius: 4px;
+  padding: 16px 22px 14px;
+  min-height: 335px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow:
+    inset 0 0 24px rgba(150, 180, 210, 0.32),
+    0 0 6px rgba(255, 255, 255, 0.15);
+  position: relative;
 }
 
-.tela-topo {
+.lcd-cabecalho {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-bottom: 10px;
+  min-height: 40px;
+  margin-bottom: 8px;
 }
 
-.brasao-icone {
+.lcd-brasao {
   position: absolute;
-  left: 6px;
-  display: flex;
-  align-items: center;
+  left: 4px;
+  top: 0;
 }
 
-.tela-titulo-justica {
-  font-size: clamp(1rem, 2.2vw, 1.35rem);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #252f3d;
+.lcd-titulo-institucional {
+  font-size: clamp(1.08rem, 2.2vw, 1.42rem);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #1e2836;
 }
 
-.tela-faixa-azul {
-  background: linear-gradient(90deg, #4b6cb7 0%, #3b5998 50%, #4b6cb7 100%);
-  color: #fff;
+.lcd-faixa-azul {
+  background: linear-gradient(90deg, #4f709c 0%, #3d5d8a 50%, #4f709c 100%);
+  color: #ffffff;
   text-align: center;
   font-weight: 700;
   font-size: 1.02rem;
   padding: 6px 12px;
   border-radius: 4px 4px 0 0;
   letter-spacing: 0.02em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-.tela-quadro-principal {
-  border: 1.5px solid #9fb3c8;
+.lcd-area-central {
+  border: 1.5px solid #9ab0c7;
   border-top: none;
   border-radius: 0 0 6px 6px;
   background: #ffffff;
-  padding: 18px 20px;
+  padding: 18px 22px;
   display: grid;
-  grid-template-columns: 1fr 135px;
-  gap: 18px;
+  grid-template-columns: 1fr 142px;
+  gap: 20px;
   align-items: center;
 }
 
-.tela-cargo {
-  font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+.lcd-cargo {
+  font-size: clamp(1.25rem, 2.6vw, 1.65rem);
   font-weight: 800;
-  color: #1f2833;
+  color: #1c2530;
   letter-spacing: 0.03em;
   margin-bottom: 12px;
 }
 
-.tela-caixas-numero {
+.lcd-caixas-digitos {
   display: flex;
   gap: 10px;
   margin-bottom: 14px;
 }
 
-.digito-caixa {
-  width: 50px;
-  height: 60px;
-  border: 2px solid #6e7d8f;
+.lcd-digito {
+  width: 52px;
+  height: 62px;
+  border: 2px solid #637282;
   border-radius: 4px;
-  background: #f9fbfd;
+  background: #fbfdff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 2.15rem;
   font-weight: 800;
-  color: #111822;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #111722;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12);
 }
 
-.digito-caixa.piscando {
-  border-color: #2c5aa0;
-  animation: piscaBorda 1s infinite;
+.lcd-digito.piscando {
+  border-color: #285496;
+  animation: cursorUrna 0.95s infinite;
 }
 
-@keyframes piscaBorda {
-  0%, 100% { background: #f9fbfd; }
-  50% { background: #e1ecfa; }
+@keyframes cursorUrna {
+  0%, 100% { background: #fbfdff; box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12); }
+  50% { background: #dfeafa; box-shadow: inset 0 0 0 2px rgba(40, 84, 150, 0.35); }
 }
 
-.tela-campos p {
-  margin: 5px 0;
-  font-size: 0.98rem;
-  color: #27313f;
+.lcd-dados-candidato {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.tela-status {
-  min-height: 20px;
-  font-size: 0.86rem !important;
+.lcd-linha-dado {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 1rem;
+  min-height: 24px;
+}
+
+.lcd-rotulo {
   font-weight: 700;
+  color: #2b3645;
+  min-width: 68px;
 }
 
-.status-ok { color: #1d7a39 !important; }
-.status-aviso { color: #c85a14 !important; }
+.lcd-valor {
+  font-weight: 800;
+  color: #111824;
+  font-size: 1.05rem;
+}
 
-/* Moldura da Silhueta do Candidato */
-.tela-avatar-box {
-  width: 130px;
-  height: 152px;
-  border: 1.5px solid #b5c4d4;
+.lcd-mensagem-status {
+  margin-top: 4px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #526277;
+  min-height: 18px;
+}
+
+.status-valido { color: #197a37; }
+.status-alerta { color: #c45112; }
+
+/* Moldura da Silhueta do Candidato na Direita do LCD */
+.lcd-coluna-foto {
+  display: flex;
+  justify-content: center;
+}
+
+.lcd-retrato-moldura {
+  width: 136px;
+  height: 160px;
+  border: 1.5px solid #b3c2d1;
   border-radius: 4px;
-  background: linear-gradient(180deg, #f2f5f8 0%, #dfe6ed 100%);
+  background: linear-gradient(180deg, #f3f6f9 0%, #e1e8f0 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   position: relative;
   overflow: hidden;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-.silhueta-svg {
-  width: 112px;
-  height: 128px;
+.lcd-silhueta {
+  width: 120px;
+  height: 140px;
 }
 
-.avatar-numero-tag {
+.lcd-retrato-tag {
   position: absolute;
   top: 6px;
   right: 6px;
-  background: #3b5998;
+  background: #3d5d8a;
   color: #fff;
-  font-size: 0.7rem;
+  font-size: 0.66rem;
   font-weight: 800;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
 }
 
-/* Instruções Inferiores da Tela LCD */
-.tela-instrucoes {
-  margin-top: 12px;
+/* Instruções na Base da Tela LCD */
+.lcd-rodape-instrucoes {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #cbd6e2;
   text-align: center;
-  font-size: 0.85rem;
-  line-height: 1.45;
-  color: #242f3d;
+  font-size: 0.84rem;
+  line-height: 1.42;
+  color: #1f2a38;
   font-weight: 600;
 }
 
-.cor-verde { color: #1b8a3d; font-weight: 800; }
-.cor-laranja { color: #d96b16; font-weight: 800; }
-.link-urna { color: #2b549a; font-weight: 800; text-decoration: underline; }
+.instrucao-titulo {
+  font-weight: 700;
+  color: #2c3849;
+}
 
-/* Base Inferior da Urna: Relevo Esquerdo + Teclado Direito */
-.urna-base-inferior {
-  margin-top: 24px;
+.txt-verde { color: #178236; font-weight: 800; }
+.txt-laranja { color: #d66011; font-weight: 800; }
+.link-urna { color: #264f8c; font-weight: 800; text-decoration: underline; }
+
+/* Tela de FIM (Pós-Confirmação) */
+.lcd-tela-fim {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.fim-barra-progresso {
+  width: 65%;
+  height: 14px;
+  border: 2px solid #2b3645;
+  border-radius: 3px;
+  background: #e6eef6;
+  overflow: hidden;
+}
+
+.fim-barra-preenchimento {
+  width: 0%;
+  height: 100%;
+  background: #2f8544;
+  transition: width 0.5s ease-out;
+}
+
+.fim-texto {
+  font-size: 5rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #1b2430;
+  line-height: 1;
+}
+
+.fim-subtexto {
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #197a37;
+}
+
+/* =========================================================
+   CONSOLE INFERIOR DA URNA: RELEVO + TECLADO FÍSICO 3D
+   ========================================================= */
+.urna-vinco-central {
+  height: 8px;
+  background: linear-gradient(180deg, #9b9b91 0%, #dcdcd4 100%);
+  border-top: 1px solid #8a8a80;
+  border-bottom: 1px solid #e6e6de;
+}
+
+.urna-painel-inferior {
+  padding: 26px 34px 34px;
+  background: linear-gradient(180deg, #cfcfc7 0%, #b8b8ae 100%);
   display: grid;
   grid-template-columns: 1fr 1.25fr;
-  gap: 24px;
+  gap: 28px;
   align-items: center;
 }
 
-.urna-relevo-brasao {
-  height: 220px;
-  border-radius: 10px;
-  background: repeating-linear-gradient(
-    -28deg,
-    rgba(110, 112, 106, 0.12),
-    rgba(110, 112, 106, 0.12) 2px,
-    transparent 2px,
-    transparent 6px
-  );
-  border: 1px solid rgba(120, 120, 112, 0.35);
+/* Brasão em Baixo-Relevo no Lado Esquerdo */
+.urna-relevo-esquerdo {
+  height: 238px;
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(
+      -26deg,
+      rgba(90, 92, 86, 0.13),
+      rgba(90, 92, 86, 0.13) 2px,
+      rgba(255, 255, 255, 0.18) 2px,
+      rgba(255, 255, 255, 0.18) 5px
+    );
+  border: 1px solid rgba(110, 110, 102, 0.42);
+  box-shadow:
+    inset 0 2px 5px rgba(70, 70, 64, 0.25),
+    0 1px 0 rgba(255, 255, 255, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
 }
 
-.relevo-linhas {
+.relevo-placa-hachurada {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: rgba(82, 85, 92, 0.65);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-align: center;
 }
 
-/* Área do Teclado Físico */
-.urna-teclado-area {
-  background: rgba(155, 155, 148, 0.35);
-  padding: 16px;
+.relevo-brasao-svg {
+  width: 122px;
+  height: 122px;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
+}
+
+.relevo-legenda {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: rgba(70, 73, 80, 0.65);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Conjunto do Teclado Físico (Direita) */
+.urna-teclado-conjunto {
+  background: linear-gradient(180deg, #b5b5ab 0%, #a5a59b 100%);
+  padding: 18px 20px 22px;
   border-radius: 12px;
-  border: 1px solid rgba(115, 115, 108, 0.45);
+  border: 1px solid #8c8c82;
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.32),
+    0 2px 0 rgba(255, 255, 255, 0.55);
   display: grid;
-  grid-template-columns: 1fr 112px;
-  gap: 14px;
+  grid-template-columns: 1fr 118px;
+  gap: 16px;
   align-items: stretch;
 }
 
-.teclado-numerico {
+.teclado-grade-numeros {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 12px;
 }
 
-.tecla-num {
-  height: 48px;
-  background: linear-gradient(180deg, #3c3f44 0%, #24272b 100%);
-  color: #f3f5f8;
-  border: 1px solid #16181b;
+/* Teclas Numéricas Pretas 3D */
+.tecla-preta {
+  height: 50px;
+  background: linear-gradient(180deg, #3b3e45 0%, #22252a 75%, #191b1f 100%);
+  color: #f4f6fa;
+  border: 1px solid #111316;
   border-radius: 7px;
   box-shadow:
-    0 5px 0 #141619,
-    0 7px 10px rgba(0, 0, 0, 0.45),
-    inset 0 1px 1px rgba(255, 255, 255, 0.22);
+    0 6px 0 #101215,
+    0 8px 12px rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 11px;
+  padding: 0 12px;
   cursor: pointer;
+  user-select: none;
   transition: transform 0.06s ease, box-shadow 0.06s ease;
 }
 
-.tecla-num:active {
-  transform: translateY(3px);
-  box-shadow: 0 2px 0 #141619, 0 3px 5px rgba(0, 0, 0, 0.4);
+.tecla-preta:hover {
+  background: linear-gradient(180deg, #454952 0%, #282b31 75%, #1d2025 100%);
 }
 
-.tecla-algarismo {
-  font-size: 1.25rem;
+.tecla-preta:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 2px 0 #101215,
+    0 3px 6px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.tecla-numero {
+  font-size: 1.32rem;
   font-weight: 700;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
-.tecla-braille {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.42);
+.tecla-pontos-braille {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.45);
 }
 
-.teclado-acoes {
+/* Coluna das 3 Teclas Coloridas (BRANCO / CORRIGE / CONFIRMA) */
+.teclado-coluna-acoes {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.tecla-acao {
+.tecla-funcao {
   border-radius: 7px;
   font-weight: 800;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   letter-spacing: 0.03em;
   cursor: pointer;
-  transition: transform 0.06s ease, box-shadow 0.06s ease;
+  user-select: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
 }
 
 .tecla-branco {
-  height: 46px;
-  background: linear-gradient(180deg, #ffffff 0%, #e4e7ec 100%);
-  color: #1b222c;
-  border: 1px solid #a8b0bc;
-  box-shadow: 0 5px 0 #9aa2ae, 0 7px 10px rgba(0, 0, 0, 0.35);
+  height: 48px;
+  background: linear-gradient(180deg, #ffffff 0%, #e6e9ef 80%, #d5dae2 100%);
+  color: #1a2028;
+  border: 1px solid #9ba3b0;
+  box-shadow:
+    0 6px 0 #8a929e,
+    0 8px 12px rgba(0, 0, 0, 0.42),
+    inset 0 1px 1px #ffffff;
 }
 
 .tecla-corrige {
-  height: 46px;
-  background: linear-gradient(180deg, #f0852e 0%, #d46614 100%);
-  color: #1a120b;
-  border: 1px solid #9e4808;
-  box-shadow: 0 5px 0 #8c3f06, 0 7px 10px rgba(0, 0, 0, 0.38);
+  height: 48px;
+  background: linear-gradient(180deg, #f58932 0%, #de6a14 80%, #c4580a 100%);
+  color: #191008;
+  border: 1px solid #8f3e04;
+  box-shadow:
+    0 6px 0 #783303,
+    0 8px 12px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 225, 195, 0.55);
 }
 
 .tecla-confirma {
   flex: 1;
-  min-height: 92px;
-  background: linear-gradient(180deg, #4ec068 0%, #34964b 100%);
-  color: #0e2213;
-  border: 1px solid #226b33;
-  box-shadow: 0 6px 0 #1d592b, 0 8px 12px rgba(0, 0, 0, 0.42);
-  font-size: 0.84rem;
+  min-height: 100px;
+  background: linear-gradient(180deg, #4ec468 0%, #359d4e 75%, #28823d 100%);
+  color: #0b1f10;
+  border: 1px solid #1b612b;
+  box-shadow:
+    0 7px 0 #164f23,
+    0 10px 14px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(210, 255, 220, 0.55);
+  font-size: 0.85rem;
 }
 
-.tecla-acao:active {
-  transform: translateY(3px);
+.tecla-funcao:active {
+  transform: translateY(4px);
 }
 
-/* Boletim de Urna na página de Votos */
+/* =========================================================
+   BOLETIM DE URNA (PÁGINA DE VOTOS)
+   ========================================================= */
 .boletim-grade {
-  border: 1.5px solid #9fb3c8;
+  border: 1.5px solid #9ab0c7;
   border-top: none;
   border-radius: 0 0 6px 6px;
-  background: #fff;
-  padding: 14px 18px;
+  background: #ffffff;
+  padding: 16px 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
 }
 
 .boletim-item {
-  border: 1px solid #d7e1ec;
+  border: 1px solid #d5e0ec;
   border-radius: 6px;
-  padding: 10px 12px;
+  padding: 12px 14px;
+  background: #f9fbfd;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.boletim-linha-topo {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  background: #f9fbfd;
 }
 
 .boletim-num {
-  background: #3b5998;
+  background: #3d5d8a;
   color: #fff;
   font-weight: 800;
   font-size: 0.78rem;
@@ -445,39 +700,110 @@ main {
   flex-direction: column;
 }
 
-.boletim-info strong { font-size: 0.92rem; color: #1b2430; }
-.boletim-info small { font-size: 0.76rem; color: #5b687a; }
+.boletim-info strong { font-size: 0.94rem; color: #16202c; }
+.boletim-info small { font-size: 0.76rem; color: #5b697c; }
 
-.boletim-votos {
-  font-weight: 800;
-  font-size: 0.84rem;
-  color: #1b8a3d;
+.boletim-placar-direita {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.boletim-votos { font-weight: 800; font-size: 0.86rem; color: #197a37; }
+.boletim-perc { font-size: 0.74rem; font-weight: 700; color: #526277; }
+
+.boletim-barra-fundo {
+  height: 7px;
+  background: #e2eaf2;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.boletim-barra-preenchimento {
+  height: 100%;
+  background: linear-gradient(90deg, #359d4e, #4ec468);
+  border-radius: 999px;
 }
 
 /* =========================================================
-   SEÇÃO MVC DE CARTÕES E TABELA DE VOTOS
+   SEÇÃO DE DADOS MVC (CARTÕES DE CANDIDATOS E TABELA DE VOTOS)
    ========================================================= */
 .secao-dados {
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
-.cabecalho { margin-bottom: 24px; }
-.etiqueta { color: #679bf1; font-size: 0.76rem; letter-spacing: 0.12em; font-weight: 800; }
-h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin: 8px 0; letter-spacing: -0.03em; color: #fff; }
-.cabecalho p:last-child, .dica { color: var(--suave); line-height: 1.6; }
+.cabecalho-secao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--borda-sutil);
+}
+
+.etiqueta {
+  color: #6ea2f5;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+
+h1 {
+  font-size: clamp(1.65rem, 3.5vw, 2.25rem);
+  margin: 0;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.subtitulo-secao {
+  color: var(--texto-suave);
+  margin: 6px 0 0;
+  font-size: 0.94rem;
+}
+
+.resumo-contador {
+  background: var(--painel-card);
+  border: 1px solid var(--borda-sutil);
+  padding: 10px 18px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.resumo-contador span {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--texto-suave);
+}
+
+.resumo-contador strong {
+  font-size: 1.5rem;
+  color: #fff;
+}
 
 .grade {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 18px;
 }
 
 .cartao, .vazio, .painel-voto {
-  background: var(--painel);
-  border: 1px solid var(--borda);
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  background: var(--painel-card);
+  border: 1px solid var(--borda-sutil);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.cartao:hover {
+  background: var(--painel-card-hover);
+  border-color: #3a4b69;
 }
 
 .cartao-topo {
@@ -485,18 +811,48 @@ h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin: 8px 0; letter-spacing: -0.03
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  margin-bottom: 14px;
 }
 
-.cartao h2 { margin: 16px 0 6px; color: #fff; }
-.cartao p { color: var(--suave); margin-bottom: 18px; }
+.cartao-corpo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.cartao-mini-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: #222d40;
+  border: 1px solid #33435e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cartao h2 {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.cartao p {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
 
 .cartao-rodape {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
   padding-top: 14px;
-  border-top: 1px solid var(--borda);
+  border-top: 1px solid var(--borda-sutil);
 }
 
 .cartao-botoes {
@@ -505,106 +861,177 @@ h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin: 8px 0; letter-spacing: -0.03
   gap: 8px;
 }
 
-.cartao small { color: var(--suave); }
+.cartao small {
+  color: var(--texto-suave);
+  font-weight: 600;
+}
 
 .numero {
   display: inline-flex;
-  padding: 6px 12px;
-  border-radius: 999px;
-  color: #9ec5ff;
-  background: rgba(59, 110, 165, 0.28);
-  border: 1px solid rgba(110, 165, 235, 0.35);
+  padding: 5px 11px;
+  border-radius: 6px;
+  color: #b8d4ff;
+  background: rgba(62, 96, 150, 0.35);
+  border: 1px solid rgba(110, 162, 245, 0.35);
   font-weight: 800;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
 }
 
 .placar {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: #7ee29a;
-  background: rgba(58, 166, 85, 0.16);
-  padding: 5px 10px;
+  color: #84e89f;
+  background: rgba(53, 157, 78, 0.18);
+  border: 1px solid rgba(78, 196, 104, 0.28);
+  padding: 4px 10px;
   border-radius: 999px;
 }
 
 .botao-testar-urna {
-  background: #2c374b;
-  color: #e3ecfa;
-  border: 1px solid #41516d;
-  border-radius: 9px;
-  padding: 8px 11px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  background: #253247;
+  color: #e2e8f0;
+  border: 1px solid #3b4f6e;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 .botao-testar-urna:hover {
-  background: #394863;
+  background: #30415c;
+  border-color: #54719c;
 }
 
 .botao-votar {
-  background: var(--verde-urna);
+  background: var(--verde-confirma);
   color: #fff;
-  border: none;
-  border-radius: 9px;
+  border: 1px solid #2b8240;
+  border-radius: 8px;
   padding: 8px 14px;
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: background 0.15s ease;
 }
 
-.botao-votar:hover { background: var(--verde-urna-hover); }
-
-.painel-voto { margin-bottom: 22px; padding: 18px 24px; }
-.form-voto { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-.form-voto label { font-weight: 600; font-size: 0.92rem; }
-.form-voto select {
-  flex: 1;
-  min-width: 220px;
-  padding: 10px 12px;
-  border: 1px solid var(--borda);
-  border-radius: 10px;
-  font-size: 0.92rem;
-  color: var(--texto);
-  background: #121722;
+.botao-votar:hover {
+  background: var(--verde-confirma-escuro);
 }
 
-.vazio { color: var(--suave); line-height: 1.8; }
-.vazio a { color: #7eb3ff; }
+.painel-voto {
+  margin-bottom: 22px;
+  padding: 18px 22px;
+}
+
+.form-voto {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-voto label {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.form-voto select {
+  flex: 1;
+  min-width: 240px;
+  padding: 10px 14px;
+  border: 1px solid #36455e;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: var(--texto-claro);
+  background: #0f1520;
+}
+
+.vazio {
+  color: var(--texto-suave);
+  line-height: 1.8;
+  text-align: center;
+}
+
+.vazio a {
+  color: #7eb3ff;
+  font-weight: 700;
+}
 
 .tabela-wrap {
   overflow-x: auto;
-  background: var(--painel);
-  border: 1px solid var(--borda);
-  border-radius: 16px;
+  background: var(--painel-card);
+  border: 1px solid var(--borda-sutil);
+  border-radius: 14px;
 }
 
-table { width: 100%; border-collapse: collapse; text-align: left; }
-th, td { padding: 15px 18px; border-bottom: 1px solid var(--borda); white-space: nowrap; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--borda-sutil);
+  white-space: nowrap;
+}
+
 th {
-  background: rgba(15, 20, 29, 0.65);
-  color: var(--suave);
-  font-size: 0.78rem;
+  background: rgba(11, 15, 22, 0.65);
+  color: var(--texto-suave);
+  font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-tr:last-child td { border-bottom: 0; }
 
-.dica { margin-top: 24px; font-size: 0.9rem; }
-.rodape {
-  border-top: 1px solid var(--borda);
-  padding: 22px 0;
-  color: var(--suave);
-  font-size: 0.85rem;
-  background: rgba(12, 16, 23, 0.9);
+tr:last-child td {
+  border-bottom: 0;
 }
 
-@media (max-width: 740px) {
-  .nav { align-items: flex-start; flex-direction: column; padding: 16px 0; }
-  .tela-quadro-principal { grid-template-columns: 1fr; }
-  .tela-avatar-box { margin: 0 auto; }
-  .urna-base-inferior { grid-template-columns: 1fr; }
-  .urna-relevo-brasao { display: none; }
+.tag-id {
+  font-family: monospace;
+  color: var(--texto-suave);
+}
+
+.tag-num {
+  background: rgba(62, 96, 150, 0.3);
+  color: #b8d4ff;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.dica {
+  margin-top: 24px;
+  font-size: 0.86rem;
+  color: var(--texto-suave);
+}
+
+.rodape {
+  border-top: 1px solid var(--borda-sutil);
+  padding: 20px 0;
+  color: var(--texto-suave);
+  font-size: 0.82rem;
+  background: rgba(10, 14, 20, 0.95);
+}
+
+.rodape-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 760px) {
+  .nav { align-items: flex-start; flex-direction: column; padding: 14px 0; }
+  .urna-painel-superior { padding: 14px; }
+  .urna-moldura-preta { padding: 12px; }
+  .lcd-area-central { grid-template-columns: 1fr; }
+  .urna-painel-inferior { grid-template-columns: 1fr; padding: 18px; }
+  .urna-relevo-esquerdo { display: none; }
 }

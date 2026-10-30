@@ -3,18 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= titulo %> | Eleições FIC</title>
-  <link rel="stylesheet" href="/style.css">
+  <title><%= titulo %> | Justiça Eleitoral — Eleições FIC</title>
+  <link rel="stylesheet" href="/style.css?v=4">
 </head>
 <body>
 <header class="topo">
   <div class="container nav">
-    <a class="marca" href="/candidatos">Eleições FIC</a>
+    <a class="marca" href="/candidatos">
+      <span class="marca-icone" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="28" height="28">
+          <circle cx="32" cy="32" r="29" fill="#1e5631" stroke="#e5b83b" stroke-width="3.5"/>
+          <polygon points="32,9 38,24 54,24 41,33 46,49 32,39 18,49 23,33 10,24 26,24" fill="#e5b83b"/>
+          <circle cx="32" cy="32" r="9" fill="#1f4e8c" stroke="#fff" stroke-width="1.5"/>
+        </svg>
+      </span>
+      <span class="marca-texto">
+        <strong>JUSTIÇA ELEITORAL</strong>
+        <small>Sistema Eleições FIC • Padrão MVC</small>
+      </span>
+    </a>
     <nav>
-      <a class="<%= titulo === 'Candidatos' ? 'ativo' : '' %>" href="/candidatos">Candidatos</a>
-      <a class="<%= titulo === 'Votos' ? 'ativo' : '' %>" href="/votos">Votos</a>
-      <a href="/api/candidatos" target="_blank">API de candidatos</a>
-      <a href="/api/votos" target="_blank">API de votos</a>
+      <a class="<%= titulo === 'Candidatos' ? 'ativo' : '' %>" href="/candidatos">Urna &amp; Candidatos</a>
+      <a class="<%= titulo === 'Votos' ? 'ativo' : '' %>" href="/votos">Boletim de Votos</a>
+      <a class="link-api" href="/api/candidatos" target="_blank">API Candidatos</a>
+      <a class="link-api" href="/api/votos" target="_blank">API Votos</a>
     </nav>
   </div>
 </header>

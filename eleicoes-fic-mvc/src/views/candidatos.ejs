@@ -1,91 +1,162 @@
 <%- include('partials/header', { titulo: 'Candidatos' }) %>
 
-<!-- Urna Eletrônica Interativa + Painel de Candidatos -->
+<!-- Barra de Cola Eleitoral Rápida -->
+<div class="cola-eleitoral">
+  <span class="cola-label">Números habilitados na Urna:</span>
+  <div class="cola-pilulas">
+    <% if (candidatos.length === 0) { %>
+      <span class="cola-vazia">Nenhum candidato cadastrado</span>
+    <% } else { %>
+      <% candidatos.forEach(candidato => { %>
+        <button type="button" class="cola-pilula" onclick="preencherNaUrna('<%= candidato.numero %>')">
+          <strong><%= candidato.numero %></strong>
+          <span><%= candidato.nome %></span>
+        </button>
+      <% }) %>
+    <% } %>
+  </div>
+</div>
+
+<!-- Urna Eletrônica Realista (Fiel à imagem de referência) -->
 <section class="palco-urna">
-  <div class="urna-carcaca">
-    <!-- Tela LCD Superior -->
-    <div class="urna-moldura-tela">
-      <div class="urna-tela" id="urnaTela">
-        <div class="tela-topo">
-          <div class="brasao-icone" aria-hidden="true">
-            <svg viewBox="0 0 64 64" width="34" height="34">
-              <circle cx="32" cy="32" r="28" fill="#1d6b3a" stroke="#f2c94c" stroke-width="3"/>
-              <polygon points="32,10 38,24 53,24 41,33 45,48 32,39 19,48 23,33 11,24 26,24" fill="#f2c94c"/>
-              <circle cx="32" cy="32" r="8" fill="#1e4fa1"/>
-            </svg>
-          </div>
-          <span class="tela-titulo-justica">JUSTIÇA ELEITORAL</span>
-        </div>
+  <div class="urna-gabinete">
+    <!-- Chanfro Superior do Gabinete -->
+    <div class="urna-chanfro-topo"></div>
 
-        <div class="tela-faixa-azul">Seu voto vai para:</div>
-
-        <div class="tela-quadro-principal">
-          <div class="tela-dados-esq">
-            <div class="tela-cargo">CANDIDATO(A) — ELEIÇÕES FIC</div>
-            <div class="tela-caixas-numero" id="caixasNumero">
-              <span class="digito-caixa piscando" id="digito0"></span>
-              <span class="digito-caixa" id="digito1"></span>
-              <span class="digito-caixa" id="digito2"></span>
-              <span class="digito-caixa" id="digito3"></span>
+    <!-- Corpo Superior: Moldura Preta + Tela LCD -->
+    <div class="urna-painel-superior">
+      <div class="urna-moldura-preta">
+        <div class="urna-lcd" id="urnaTela">
+          <!-- Tela Normal de Votação -->
+          <div id="lcdConteudoVoto">
+            <div class="lcd-cabecalho">
+              <div class="lcd-brasao" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="38" height="38">
+                  <circle cx="32" cy="32" r="29" fill="#1e6b3a" stroke="#e8c14a" stroke-width="3"/>
+                  <circle cx="32" cy="32" r="23" fill="none" stroke="#2d8a4e" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <polygon points="32,8 38,23 55,23 41,33 46,49 32,39 18,49 23,33 9,23 26,23" fill="#f0c84b" stroke="#b8860b" stroke-width="1"/>
+                  <circle cx="32" cy="32" r="9.5" fill="#1a4b8c" stroke="#ffffff" stroke-width="1.5"/>
+                  <path d="M23 31 Q32 28 41 31" stroke="#ffffff" stroke-width="1.6" fill="none"/>
+                </svg>
+              </div>
+              <div class="lcd-titulo-institucional">JUSTIÇA ELEITORAL</div>
             </div>
-            <div class="tela-campos">
-              <p><strong>Nome:</strong> <span id="telaNome">Digite o número no teclado...</span></p>
-              <p><strong>Partido:</strong> <span id="telaPartido">—</span></p>
-              <p class="tela-status" id="telaStatus"></p>
+
+            <div class="lcd-faixa-azul">Seu voto vai para:</div>
+
+            <div class="lcd-area-central">
+              <div class="lcd-coluna-esquerda">
+                <div class="lcd-cargo">DEPUTADO FEDERAL</div>
+
+                <div class="lcd-caixas-digitos" id="caixasNumero">
+                  <span class="lcd-digito piscando" id="digito0"></span>
+                  <span class="lcd-digito" id="digito1"></span>
+                  <span class="lcd-digito" id="digito2"></span>
+                  <span class="lcd-digito" id="digito3"></span>
+                </div>
+
+                <div class="lcd-dados-candidato">
+                  <div class="lcd-linha-dado">
+                    <span class="lcd-rotulo">Nome:</span>
+                    <span class="lcd-valor" id="telaNome"></span>
+                  </div>
+                  <div class="lcd-linha-dado">
+                    <span class="lcd-rotulo">Partido:</span>
+                    <span class="lcd-valor" id="telaPartido"></span>
+                  </div>
+                  <div class="lcd-mensagem-status" id="telaStatus">
+                    Digite o número do candidato ou clique em um cartão abaixo
+                  </div>
+                </div>
+              </div>
+
+              <div class="lcd-coluna-foto">
+                <div class="lcd-retrato-moldura" id="telaAvatarBox">
+                  <svg viewBox="0 0 120 145" class="lcd-silhueta" aria-hidden="true">
+                    <defs>
+                      <linearGradient id="silGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d646e"/>
+                        <stop offset="100%" stop-color="#434952"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M60 22 C45 22 36 34 37 51 C38 62 43 72 49 77 L48 86 L20 98 C12 102 8 112 8 145 L112 145 C112 112 108 102 100 98 L72 86 L71 77 C77 72 82 62 83 51 C84 34 75 22 60 22 Z" fill="url(#silGrad)"/>
+                  </svg>
+                  <span class="lcd-retrato-tag" id="telaAvatarTag">CANDIDATO</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="lcd-rodape-instrucoes">
+              <div class="instrucao-titulo">Aperte a tecla:</div>
+              <div class="instrucao-item"><span class="txt-verde">VERDE</span> para CONFIRMAR</div>
+              <div class="instrucao-item"><span class="txt-laranja">LARANJA</span> para CORRIGE</div>
+              <div class="instrucao-item"><strong>BRANCO</strong> para VOTAR EM BRANCO</div>
             </div>
           </div>
 
-          <div class="tela-avatar-box" id="telaAvatarBox">
-            <svg viewBox="0 0 120 140" class="silhueta-svg" aria-hidden="true">
-              <circle cx="60" cy="46" r="24" fill="#68707a"/>
-              <path d="M16 136 C16 96, 104 96, 104 136 Z" fill="#68707a"/>
-            </svg>
-            <span class="avatar-numero-tag" id="telaAvatarTag">FIC</span>
+          <!-- Tela de FIM (Exibida ao confirmar voto) -->
+          <div id="lcdConteudoFim" class="lcd-tela-fim" style="display: none;">
+            <div class="fim-barra-progresso">
+              <div class="fim-barra-preenchimento" id="fimBarra"></div>
+            </div>
+            <div class="fim-texto">FIM</div>
+            <div class="fim-subtexto">VOTO COMPUTADO COM SUCESSO</div>
           </div>
-        </div>
-
-        <div class="tela-instrucoes">
-          <div>Aperte a tecla:</div>
-          <div><span class="cor-verde">VERDE</span> para CONFIRMAR</div>
-          <div><span class="cor-laranja">LARANJA</span> para CORRIGE</div>
-          <div><strong>BRANCO</strong> para VOTAR EM BRANCO</div>
         </div>
       </div>
     </div>
 
-    <!-- Base Inferior: Brasão em relevo + Teclado Físico -->
-    <div class="urna-base-inferior">
-      <div class="urna-relevo-brasao" aria-hidden="true">
-        <div class="relevo-linhas">
-          <svg viewBox="0 0 120 120" width="96" height="96">
-            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(90,94,102,0.32)" stroke-width="2" stroke-dasharray="4 3"/>
-            <polygon points="60,16 71,44 101,44 77,62 86,91 60,73 34,91 43,62 19,44 49,44" fill="none" stroke="rgba(90,94,102,0.38)" stroke-width="2.2"/>
-            <circle cx="60" cy="60" r="16" fill="none" stroke="rgba(90,94,102,0.42)" stroke-width="2"/>
+    <!-- Vinco Divisório do Gabinete -->
+    <div class="urna-vinco-central"></div>
+
+    <!-- Corpo Inferior: Brasão em Baixo-Relevo + Teclado Físico -->
+    <div class="urna-painel-inferior">
+      <!-- Lado Esquerdo: Brasão da República gravado em relevo -->
+      <div class="urna-relevo-esquerdo" aria-hidden="true">
+        <div class="relevo-placa-hachurada">
+          <svg viewBox="0 0 160 160" class="relevo-brasao-svg">
+            <circle cx="80" cy="80" r="64" fill="none" stroke="rgba(75,78,84,0.32)" stroke-width="2" stroke-dasharray="5 3"/>
+            <circle cx="80" cy="80" r="52" fill="none" stroke="rgba(75,78,84,0.25)" stroke-width="1.5"/>
+            <polygon points="80,18 95,56 136,56 103,80 115,120 80,96 45,120 57,80 24,56 65,56" fill="none" stroke="rgba(70,73,80,0.42)" stroke-width="2.5"/>
+            <circle cx="80" cy="80" r="22" fill="none" stroke="rgba(70,73,80,0.45)" stroke-width="2.2"/>
+            <path d="M60 78 Q80 70 100 78" fill="none" stroke="rgba(70,73,80,0.4)" stroke-width="2"/>
+            <path d="M40 132 Q80 144 120 132" fill="none" stroke="rgba(70,73,80,0.4)" stroke-width="2"/>
           </svg>
-          <span>REPÚBLICA FEDERATIVA DO BRASIL</span>
+          <span class="relevo-legenda">JUSTIÇA ELEITORAL</span>
         </div>
       </div>
 
-      <div class="urna-teclado-area">
-        <div class="teclado-numerico">
-          <% [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(num => { %>
-            <button type="button" class="tecla-num" data-num="<%= num %>">
-              <span class="tecla-algarismo"><%= num %></span>
-              <span class="tecla-braille">⠿</span>
+      <!-- Lado Direito: Teclado Físico 3D -->
+      <div class="urna-teclado-conjunto">
+        <div class="teclado-grade-numeros">
+          <% [
+            { n: 1, b: '⠁' }, { n: 2, b: '⠃' }, { n: 3, b: '⠉' },
+            { n: 4, b: '⠙' }, { n: 5, b: '⠑' }, { n: 6, b: '⠋' },
+            { n: 7, b: '⠛' }, { n: 8, b: '⠓' }, { n: 9, b: '⠊' }
+          ].forEach(item => { %>
+            <button type="button" class="tecla-preta" data-num="<%= item.n %>" title="Tecla <%= item.n %>">
+              <span class="tecla-numero"><%= item.n %></span>
+              <span class="tecla-pontos-braille"><%= item.b %></span>
             </button>
           <% }) %>
-          <div class="tecla-vazia"></div>
-          <button type="button" class="tecla-num" data-num="0">
-            <span class="tecla-algarismo">0</span>
-            <span class="tecla-braille">⠿</span>
+          <div class="tecla-espaco"></div>
+          <button type="button" class="tecla-preta" data-num="0" title="Tecla 0">
+            <span class="tecla-numero">0</span>
+            <span class="tecla-pontos-braille">⠚</span>
           </button>
-          <div class="tecla-vazia"></div>
+          <div class="tecla-espaco"></div>
         </div>
 
-        <div class="teclado-acoes">
-          <button type="button" class="tecla-acao tecla-branco" id="btnBranco">BRANCO</button>
-          <button type="button" class="tecla-acao tecla-corrige" id="btnCorrige">CORRIGE</button>
-          <button type="button" class="tecla-acao tecla-confirma" id="btnConfirma">CONFIRMA</button>
+        <div class="teclado-coluna-acoes">
+          <button type="button" class="tecla-funcao tecla-branco" id="btnBranco" title="Votar em Branco">
+            <span>BRANCO</span>
+          </button>
+          <button type="button" class="tecla-funcao tecla-corrige" id="btnCorrige" title="Corrigir (Backspace)">
+            <span>CORRIGE</span>
+          </button>
+          <button type="button" class="tecla-funcao tecla-confirma" id="btnConfirma" title="Confirmar Voto (Enter)">
+            <span>CONFIRMA</span>
+          </button>
         </div>
       </div>
     </div>
@@ -96,35 +167,51 @@
   </div>
 </section>
 
-<!-- Seção MVC de Candidatos Cadastrados (Preservando tudo que já foi feito) -->
+<!-- Seção MVC: Lista Completa de Candidatos Cadastrados -->
 <section class="secao-dados">
-  <div class="cabecalho">
-    <p class="etiqueta">VISUALIZAÇÃO MVC • MODELS, CONTROLLERS & VIEWS</p>
-    <h1>Todos os candidatos</h1>
-    <p>Clique em um candidato abaixo para carregar o número na Urna Eletrônica ou digite o número diretamente no teclado da urna.</p>
+  <div class="cabecalho-secao">
+    <div>
+      <p class="etiqueta">PADRÃO MVC • CAMADA DE VISUALIZAÇÃO (EJS)</p>
+      <h1>Candidatos Registrados</h1>
+      <p class="subtitulo-secao">Lista de candidatos carregada do Model <code>Candidato</code> pelo <code>CandidatoController</code>.</p>
+    </div>
+    <div class="resumo-contador">
+      <span>Candidatos ativos</span>
+      <strong><%= candidatos.length %></strong>
+    </div>
   </div>
 
   <% if (candidatos.length === 0) { %>
-    <div class="vazio">Nenhum candidato cadastrado.</div>
+    <div class="vazio">Nenhum candidato cadastrado no momento.</div>
   <% } else { %>
     <div class="grade">
       <% candidatos.forEach(candidato => { %>
         <article class="cartao" data-numero="<%= candidato.numero %>" data-id="<%= candidato.id %>">
           <div class="cartao-topo">
-            <span class="numero">Nº <%= candidato.numero %></span>
-            <span class="placar"><%= candidato.totalVotos || 0 %> <%= (candidato.totalVotos === 1) ? 'voto' : 'votos' %></span>
+            <span class="numero">NÚMERO <%= candidato.numero %></span>
+            <span class="placar"><%= candidato.totalVotos || 0 %> <%= (candidato.totalVotos === 1) ? 'voto computado' : 'votos computados' %></span>
           </div>
-          <h2><%= candidato.nome %></h2>
-          <p><%= candidato.partido %></p>
+          <div class="cartao-corpo">
+            <div class="cartao-mini-avatar" aria-hidden="true">
+              <svg viewBox="0 0 64 64" width="38" height="38">
+                <circle cx="32" cy="22" r="12" fill="#8b9bb4"/>
+                <path d="M10 58 C10 40, 54 40, 54 58 Z" fill="#8b9bb4"/>
+              </svg>
+            </div>
+            <div>
+              <h2><%= candidato.nome %></h2>
+              <p><%= candidato.partido %></p>
+            </div>
+          </div>
           <div class="cartao-rodape">
-            <small>ID: <%= candidato.id %></small>
+            <small>Registro ID #<%= candidato.id %></small>
             <div class="cartao-botoes">
               <button type="button" class="botao-testar-urna" onclick="preencherNaUrna('<%= candidato.numero %>')">
-                Testar na Urna (<%= candidato.numero %>)
+                Digitar <%= candidato.numero %> na Urna
               </button>
               <form action="/votos" method="POST">
                 <input type="hidden" name="candidatoId" value="<%= candidato.id %>">
-                <button type="submit" class="botao-votar">Voto rápido</button>
+                <button type="submit" class="botao-votar">Confirmar Voto</button>
               </form>
             </div>
           </div>
@@ -133,7 +220,9 @@
     </div>
   <% } %>
 
-  <p class="dica">Para cadastrar, alterar ou excluir candidatos via API REST, utilize os endpoints descritos no README ou no arquivo <code>client.http</code>.</p>
+  <p class="dica">
+    Dica técnica (API REST): Para criar, atualizar ou remover candidatos via JSON, utilize os endpoints <code>/api/candidatos</code> e <code>/api/votos</code> documentados no README e no arquivo <code>client.http</code>.
+  </p>
 </section>
 
 <script id="dadosCandidatosJson" type="application/json"><%- JSON.stringify(candidatos) %></script>
@@ -141,6 +230,7 @@
   const listaCandidatos = JSON.parse(document.getElementById('dadosCandidatosJson').textContent || '[]');
   let digitosAtuais = '';
   let candidatoSelecionado = null;
+  let votando = false;
 
   const caixas = [
     document.getElementById('digito0'),
@@ -154,19 +244,45 @@
   const telaAvatarTag = document.getElementById('telaAvatarTag');
   const inputCandidatoId = document.getElementById('inputCandidatoId');
   const formUrnaVoto = document.getElementById('formUrnaVoto');
+  const lcdConteudoVoto = document.getElementById('lcdConteudoVoto');
+  const lcdConteudoFim = document.getElementById('lcdConteudoFim');
+  const fimBarra = document.getElementById('fimBarra');
 
-  function tocarBip(frequencia = 880, duracao = 0.08) {
+  function tocarBip(frequencia = 900, duracao = 0.07) {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.value = frequencia;
-      gain.gain.value = 0.08;
+      gain.gain.value = 0.09;
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start();
       osc.stop(ctx.currentTime + duracao);
+    } catch (e) {}
+  }
+
+  function tocarSomFimUrna() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const notas = [
+        { f: 1975, t: 0, d: 0.09 },
+        { f: 2093, t: 0.09, d: 0.09 },
+        { f: 1975, t: 0.18, d: 0.09 },
+        { f: 2093, t: 0.27, d: 0.38 }
+      ];
+      notas.forEach(n => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = n.f;
+        gain.gain.value = 0.12;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + n.t);
+        osc.stop(ctx.currentTime + n.t + n.d);
+      });
     } catch (e) {}
   }
 
@@ -178,10 +294,11 @@
 
     if (!digitosAtuais) {
       candidatoSelecionado = null;
-      telaNome.textContent = 'Digite o número no teclado...';
-      telaPartido.textContent = '—';
-      telaStatus.textContent = '';
-      telaAvatarTag.textContent = 'FIC';
+      telaNome.textContent = '';
+      telaPartido.textContent = '';
+      telaStatus.textContent = 'Digite o número do candidato (' + listaCandidatos.map(c => c.numero).join(', ') + ')';
+      telaStatus.className = 'lcd-mensagem-status';
+      telaAvatarTag.textContent = 'CANDIDATO';
       return;
     }
 
@@ -192,65 +309,98 @@
       candidatoSelecionado = encontrado;
       telaNome.textContent = encontrado.nome;
       telaPartido.textContent = encontrado.partido;
-      telaStatus.textContent = '✔ Candidato encontrado! Aperte CONFIRMA (verde).';
-      telaStatus.className = 'tela-status status-ok';
+      telaStatus.textContent = '✔ Candidato localizado — Pressione CONFIRMA (tecla verde)';
+      telaStatus.className = 'lcd-mensagem-status status-valido';
       telaAvatarTag.textContent = 'Nº ' + encontrado.numero;
     } else {
       candidatoSelecionado = null;
-      telaNome.textContent = digitosAtuais.length >= 2 ? 'NÚMERO INEXISTENTE' : 'Digitando...';
-      telaPartido.textContent = '—';
+      telaNome.textContent = digitosAtuais.length >= 2 ? 'NÚMERO INEXISTENTE' : '';
+      telaPartido.textContent = digitosAtuais.length >= 2 ? 'VOTO NULO' : '';
       telaStatus.textContent = digitosAtuais.length >= 2
-        ? 'Candidatos válidos: ' + listaCandidatos.map(c => c.numero).join(', ')
-        : '';
-      telaStatus.className = 'tela-status status-aviso';
-      telaAvatarTag.textContent = '?';
+        ? 'Números válidos cadastrados: ' + listaCandidatos.map(c => c.numero).join(', ')
+        : 'Continue digitando...';
+      telaStatus.className = 'lcd-mensagem-status status-alerta';
+      telaAvatarTag.textContent = digitosAtuais.length >= 2 ? 'NULO' : '...';
     }
   }
 
-  document.querySelectorAll('.tecla-num').forEach(botao => {
-    botao.addEventListener('click', () => {
-      if (digitosAtuais.length < 4) {
-        digitosAtuais += botao.dataset.num;
-        tocarBip(920, 0.06);
-        atualizarTelaUrna();
-      }
-    });
-  });
+  function inserirDigito(digito) {
+    if (votando) return;
+    if (digitosAtuais.length < 4) {
+      digitosAtuais += String(digito);
+      tocarBip(940, 0.06);
+      atualizarTelaUrna();
+    }
+  }
 
-  document.getElementById('btnCorrige').addEventListener('click', () => {
+  function acaoCorrige() {
+    if (votando) return;
     digitosAtuais = '';
-    tocarBip(520, 0.09);
+    tocarBip(520, 0.08);
     atualizarTelaUrna();
-  });
+  }
 
-  document.getElementById('btnBranco').addEventListener('click', () => {
+  function acaoBranco() {
+    if (votando) return;
     if (listaCandidatos.length > 0) {
       digitosAtuais = String(listaCandidatos[0].numero);
-      tocarBip(700, 0.08);
+      tocarBip(740, 0.08);
       atualizarTelaUrna();
-      telaStatus.textContent = 'Sugestão carregada (' + listaCandidatos[0].nome + '). Aperte CONFIRMA ou CORRIGE.';
+      telaStatus.textContent = 'Candidato selecionado (' + listaCandidatos[0].nome + '). Pressione CONFIRMA.';
+      telaStatus.className = 'lcd-mensagem-status status-valido';
     }
-  });
+  }
 
-  document.getElementById('btnConfirma').addEventListener('click', () => {
+  function acaoConfirma() {
+    if (votando) return;
     if (!candidatoSelecionado) {
-      tocarBip(300, 0.2);
-      telaStatus.textContent = '⚠ Digite um número de candidato válido antes de confirmar (' + listaCandidatos.map(c => c.numero).join(', ') + ').';
-      telaStatus.className = 'tela-status status-aviso';
+      tocarBip(280, 0.18);
+      telaStatus.textContent = '⚠ Digite um número válido (' + listaCandidatos.map(c => c.numero).join(', ') + ') antes de confirmar.';
+      telaStatus.className = 'lcd-mensagem-status status-alerta';
       return;
     }
-    tocarBip(1046, 0.12);
-    setTimeout(() => tocarBip(1318, 0.28), 120);
+
+    votando = true;
     inputCandidatoId.value = candidatoSelecionado.id;
-    formUrnaVoto.submit();
+    lcdConteudoVoto.style.display = 'none';
+    lcdConteudoFim.style.display = 'flex';
+    setTimeout(() => { fimBarra.style.width = '100%'; }, 30);
+    tocarSomFimUrna();
+
+    setTimeout(() => {
+      formUrnaVoto.submit();
+    }, 650);
+  }
+
+  document.querySelectorAll('.tecla-preta').forEach(botao => {
+    botao.addEventListener('click', () => inserirDigito(botao.dataset.num));
+  });
+
+  document.getElementById('btnCorrige').addEventListener('click', acaoCorrige);
+  document.getElementById('btnBranco').addEventListener('click', acaoBranco);
+  document.getElementById('btnConfirma').addEventListener('click', acaoConfirma);
+
+  window.addEventListener('keydown', (ev) => {
+    if (ev.target && ['INPUT', 'SELECT', 'TEXTAREA'].includes(ev.target.tagName)) return;
+    if (ev.key >= '0' && ev.key <= '9') {
+      inserirDigito(ev.key);
+    } else if (ev.key === 'Backspace' || ev.key === 'Delete') {
+      acaoCorrige();
+    } else if (ev.key === 'Enter') {
+      ev.preventDefault();
+      acaoConfirma();
+    }
   });
 
   window.preencherNaUrna = function(numero) {
+    if (votando) return;
     digitosAtuais = String(numero);
     tocarBip(980, 0.07);
     atualizarTelaUrna();
     document.querySelector('.palco-urna').scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
+
+  atualizarTelaUrna();
 </script>
 
 <%- include('partials/footer') %>
