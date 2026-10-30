@@ -49,8 +49,6 @@
                   <div class="lcd-caixas-digitos" id="caixasNumero">
                     <span class="lcd-digito ativo" id="digito0"></span>
                     <span class="lcd-digito" id="digito1"></span>
-                    <span class="lcd-digito" id="digito2"></span>
-                    <span class="lcd-digito" id="digito3"></span>
                   </div>
                 </div>
 
@@ -108,19 +106,16 @@
 
       <!-- Detalhe Sutil em Relevo (Emboss) Abaixo do Visor -->
       <div class="urna-emboss-inferior" aria-hidden="true">
-        <span class="emboss-icone">⚖️</span>
         <span>REPÚBLICA FEDERATIVA DO BRASIL • SISTEMA ELEITORAL MVC</span>
       </div>
     </div>
 
     <!-- BLOCO DIREITO: Placa da Justiça Eleitoral + Teclado Mecânico Tátil -->
     <div class="urna-bloco-teclado">
-      <!-- Placa Institucional com Símbolo da Justiça Eleitoral -->
+      <!-- Placa Institucional da Justiça Eleitoral -->
       <div class="placa-justica-eleitoral">
-        <div class="placa-brasao" aria-hidden="true">⚖️</div>
         <div class="placa-textos">
-          <strong>JUSTIÇA</strong>
-          <strong>ELEITORAL</strong>
+          <strong>JUSTIÇA ELEITORAL</strong>
         </div>
       </div>
 
@@ -176,10 +171,6 @@
       <p class="etiqueta">PADRÃO MVC • CAMADA DE VISUALIZAÇÃO (EJS)</p>
       <h1>Todos os candidatos</h1>
       <p class="subtitulo-secao">Lista de candidatos cadastrados no Model <code>Candidato</code> e processados pelo <code>CandidatoController</code>.</p>
-    </div>
-    <div class="resumo-contador">
-      <span>Candidatos registrados</span>
-      <strong><%= candidatos.length %></strong>
     </div>
   </div>
 
@@ -240,9 +231,7 @@
 
   const caixas = [
     document.getElementById('digito0'),
-    document.getElementById('digito1'),
-    document.getElementById('digito2'),
-    document.getElementById('digito3')
+    document.getElementById('digito1')
   ];
   const telaNome = document.getElementById('telaNome');
   const telaPartido = document.getElementById('telaPartido');
@@ -322,7 +311,7 @@
   function atualizarTelaUrna() {
     caixas.forEach((caixa, idx) => {
       caixa.textContent = digitosAtuais[idx] || '';
-      caixa.classList.toggle('ativo', idx === digitosAtuais.length && digitosAtuais.length < 4);
+      caixa.classList.toggle('ativo', idx === digitosAtuais.length && digitosAtuais.length < caixas.length);
     });
 
     if (!digitosAtuais) {
@@ -362,7 +351,7 @@
 
   function inserirDigito(digito) {
     if (votando) return;
-    if (digitosAtuais.length < 4) {
+    if (digitosAtuais.length < caixas.length) {
       digitosAtuais += String(digito);
       tocarBipTecla(940, 0.055);
       atualizarTelaUrna();
