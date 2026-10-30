@@ -1,0 +1,14 @@
+{
+  "name": "eleicoes-fic-mvc",
+  "version": "1.0.0",
+  "description": "Exercícios 1 e 2 de Node.js MVC - candidatos, votos e views EJS",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  }
+}

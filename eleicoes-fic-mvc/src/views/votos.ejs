@@ -1,0 +1,32 @@
+<%- include('partials/header', { titulo: 'Votos' }) %>
+<section class="cabecalho">
+  <p class="etiqueta">VISUALIZAÇÃO MVC</p>
+  <h1>Todos os votos</h1>
+  <p>Registros de votos feitos nesta execução do servidor.</p>
+</section>
+
+<% if (votos.length === 0) { %>
+  <div class="vazio">
+    Ainda não há votos registrados.<br>
+    <span>Você pode criar um voto usando POST /api/votos.</span>
+  </div>
+<% } else { %>
+  <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr><th>ID do voto</th><th>Candidato</th><th>ID do candidato</th><th>Data</th></tr>
+      </thead>
+      <tbody>
+        <% votos.forEach(voto => { %>
+          <tr>
+            <td><%= voto.id %></td>
+            <td><%= voto.candidatoNome %></td>
+            <td><%= voto.candidatoId %></td>
+            <td><%= voto.dataFormatada %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+<%- include('partials/footer') %>

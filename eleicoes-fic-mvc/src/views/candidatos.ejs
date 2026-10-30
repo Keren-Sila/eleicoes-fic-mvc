@@ -1,0 +1,24 @@
+<%- include('partials/header', { titulo: 'Candidatos' }) %>
+<section class="cabecalho">
+  <p class="etiqueta">VISUALIZAÇÃO MVC</p>
+  <h1>Todos os candidatos</h1>
+  <p>Lista de candidatos cadastrados no sistema de eleições fictícias.</p>
+</section>
+
+<% if (candidatos.length === 0) { %>
+  <div class="vazio">Nenhum candidato cadastrado.</div>
+<% } else { %>
+  <div class="grade">
+    <% candidatos.forEach(candidato => { %>
+      <article class="cartao">
+        <div class="numero">Nº <%= candidato.numero %></div>
+        <h2><%= candidato.nome %></h2>
+        <p><%= candidato.partido %></p>
+        <small>ID: <%= candidato.id %></small>
+      </article>
+    <% }) %>
+  </div>
+<% } %>
+
+<p class="dica">Para cadastrar, alterar ou excluir candidatos, utilize os endpoints da API descritos no README.</p>
+<%- include('partials/footer') %>

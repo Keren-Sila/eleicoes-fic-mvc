@@ -1,0 +1,45 @@
+### API - verificar candidatos
+GET http://localhost:3000/api/candidatos
+
+### API - consultar candidato por ID
+GET http://localhost:3000/api/candidatos/1
+
+### API - criar candidato
+POST http://localhost:3000/api/candidatos
+Content-Type: application/json
+
+{
+  "nome": "Daniel Rocha",
+  "partido": "Partido do Esporte",
+  "numero": 40
+}
+
+### API - atualizar candidato
+PUT http://localhost:3000/api/candidatos/1
+Content-Type: application/json
+
+{
+  "nome": "Ana Costa Atualizada",
+  "partido": "Partido da Educação",
+  "numero": 11
+}
+
+### API - excluir candidato (use um ID sem votos)
+DELETE http://localhost:3000/api/candidatos/4
+
+### API - listar votos
+GET http://localhost:3000/api/votos
+
+### API - registrar voto para candidato existente
+POST http://localhost:3000/api/votos
+Content-Type: application/json
+
+{
+  "candidatoId": 1
+}
+
+### Views EJS - candidatos
+GET http://localhost:3000/candidatos
+
+### Views EJS - votos
+GET http://localhost:3000/votos
