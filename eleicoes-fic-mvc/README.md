@@ -1,11 +1,13 @@
-# Eleições FIC MVC — Exercícios 1 e 2
+# ⚖️ Eleições FIC MVC — Simulador de Urna Eletrônica (Exercícios 1 e 2)
 
-Projeto didático desenvolvido para a disciplina de Node.js (UC01 - Padrão MVC). Utiliza **Node.js**, **Express**, **ES Modules (`import`/`export`)**, **arquitetura MVC** e **EJS** para renderização de views.
+Projeto didático desenvolvido para a disciplina de Node.js (**UC01 - Padrão MVC**). Utiliza **Node.js**, **Express**, **ES Modules (`import`/`export`)**, **arquitetura MVC** e **EJS** para renderização de views com interface de **Urna Eletrônica** e **Boletim de Urna**.
+
+---
 
 ## 1. Como instalar e executar
 
 1. Certifique-se de ter o **Node.js** instalado.
-2. No terminal, entre na pasta do projeto e instale as dependências:
+2. No terminal, instale as dependências e inicie o servidor:
 
 ```bash
 cd eleicoes-fic-mvc
@@ -13,13 +15,13 @@ npm install
 npm start
 ```
 
-*(Observação: você também pode executar `npm start` diretamente na pasta raiz do repositório).*
+*(Você também pode executar `npm start` diretamente na pasta raiz do repositório).*
 
 3. Com o servidor iniciado, acesse no navegador:
-   - Página de Candidatos (EJS): `http://localhost:3000/candidatos`
-   - Página de Votos (EJS): `http://localhost:3000/votos`
-   - API JSON de Candidatos: `http://localhost:3000/api/candidatos`
-   - API JSON de Votos: `http://localhost:3000/api/votos`
+   - **Urna Eletrônica & Candidatos (EJS)**: `http://localhost:3000/candidatos`
+   - **Boletim de Urna & Votos (EJS)**: `http://localhost:3000/votos`
+   - **API JSON de Candidatos**: `http://localhost:3000/api/candidatos`
+   - **API JSON de Votos**: `http://localhost:3000/api/votos`
 
 O projeto utiliza armazenamento em memória (arrays estáticos nos Models), conforme solicitado na atividade de MVC, sem dependência obrigatória de banco de dados externo.
 
@@ -30,7 +32,8 @@ O projeto utiliza armazenamento em memória (arrays estáticos nos Models), conf
 ```text
 eleicoes-fic-mvc/
 ├── public/
-│   └── style.css                     # Estilos das páginas EJS
+│   ├── img/                          # Fotos 3x4 dos candidatos (Ana Costa, Bruno Lima, Carla Souza)
+│   └── style.css                     # Estilos da Urna Eletrônica, Boletim de Urna e temas Claro/Escuro
 ├── src/
 │   ├── models/
 │   │   ├── Candidato.js              # Regras e dados de candidatos (CRUD em memória)
@@ -44,10 +47,10 @@ eleicoes-fic-mvc/
 │   │   └── viewRoutes.js             # Rotas das páginas EJS (/candidatos e /votos)
 │   └── views/
 │       ├── partials/
-│       │   ├── header.ejs            # Cabeçalho e menu de navegação
-│       │   └── footer.ejs            # Rodapé padrão
-│       ├── candidatos.ejs            # Página EJS de listagem e votação rápida de candidatos
-│       └── votos.ejs                 # Página EJS de listagem e formulário de votos
+│       │   ├── header.ejs            # Cabeçalho com menu e alternador de tema (Claro / Escuro)
+│       │   └── footer.ejs            # Rodapé institucional com atalhos de teclado
+│       ├── candidatos.ejs            # Simulador de Urna Eletrônica interativa e lista de candidatos
+│       └── votos.ejs                 # Boletim de Urna — Apuração Oficial e registro manual de votos
 ├── client.http                       # Requisições prontas para teste (REST Client)
 ├── index.js                          # Configuração do Express, middlewares, EJS e rotas
 ├── server.js                         # Inicialização do servidor HTTP na porta 3000
@@ -114,6 +117,5 @@ Cabeçalho: `Content-Type: application/json`
 
 ## 4. Exercício 2 — Views com EJS
 
-- `GET /candidatos`: acionada pelo `CandidatoController.renderizarPagina`, renderiza `src/views/candidatos.ejs` exibindo os cartões de cada candidato, número, partido, ID, total de votos recebidos e botão para votar.
-- `GET /votos`: acionada pelo `VotoController.renderizarPagina`, renderiza `src/views/votos.ejs` exibindo o formulário para registrar voto e a tabela com todos os votos computados.
-
+- **`GET /candidatos`**: acionada pelo `CandidatoController.renderizarPagina`, renderiza `src/views/candidatos.ejs` com o **Simulador de Urna Eletrônica** (visor LCD com foto 3x4, teclado numérico com Braille e efeitos sonoros, teclas `BRANCO`, `CORRIGE` e `CONFIRMA`) e a tabela de candidatos registrados.
+- **`GET /votos`**: acionada pelo `VotoController.renderizarPagina`, renderiza `src/views/votos.ejs` exibindo o **Boletim de Urna — Apuração Oficial** (com código de autenticação SHA-256, apuração por candidato, registro cronológico da seção) e o formulário de votação manual.
