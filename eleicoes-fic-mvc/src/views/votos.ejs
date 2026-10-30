@@ -1,27 +1,31 @@
 <%- include('partials/header', { titulo: 'Votos' }) %>
 
-<!-- Gabinete da Urna — Modo Boletim de Urna (Apuração Oficial) -->
+<!-- Barra Superior: Alternador de Visor (Branco / Preto) -->
+<div class="barra-controles-urna">
+  <div class="cola-eleitoral">
+    <span class="cola-label">Apuração Oficial:</span>
+    <span style="font-size: 0.84rem; color: #cbd5e1;">Total de <strong><%= votos.length %></strong> <%= votos.length === 1 ? 'voto registrado' : 'votos registrados' %></span>
+  </div>
+
+  <div class="seletor-visor" role="group" aria-label="Cor do visor da urna">
+    <span class="seletor-visor-label">Visor LCD:</span>
+    <button type="button" class="btn-visor ativo" id="btnVisorBranco" onclick="definirModoVisor('branco')">
+      <span class="bolinha-visor bolinha-clara"></span> Branco (Oficial)
+    </button>
+    <button type="button" class="btn-visor" id="btnVisorPreto" onclick="definirModoVisor('preto')">
+      <span class="bolinha-visor bolinha-escura"></span> Preto (Noturno)
+    </button>
+  </div>
+</div>
+
+<!-- Chassi da Urna — Modo Boletim de Urna -->
 <section class="palco-urna">
-  <div class="urna-gabinete urna-gabinete-boletim">
-    <div class="urna-chanfro-topo"></div>
-
-    <div class="urna-painel-superior">
-      <div class="urna-moldura-preta">
-        <div class="urna-lcd">
-          <div class="lcd-cabecalho">
-            <div class="lcd-brasao" aria-hidden="true">
-              <svg viewBox="0 0 64 64" width="38" height="38">
-                <circle cx="32" cy="32" r="29" fill="#1e6b3a" stroke="#e8c14a" stroke-width="3"/>
-                <polygon points="32,8 38,23 55,23 41,33 46,49 32,39 18,49 23,33 9,23 26,23" fill="#f0c84b" stroke="#b8860b" stroke-width="1"/>
-                <circle cx="32" cy="32" r="9.5" fill="#1a4b8c" stroke="#ffffff" stroke-width="1.5"/>
-              </svg>
-            </div>
-            <div class="lcd-titulo-institucional">JUSTIÇA ELEITORAL — BOLETIM DE URNA</div>
-          </div>
-
-          <div class="lcd-faixa-azul">
-            Apuração Oficial em Tempo Real — Total de votos computados: <%= votos.length %>
-          </div>
+  <div class="urna-chassi urna-chassi-boletim">
+    <div class="urna-bloco-visor">
+      <div class="visor-moldura-rebaixada">
+        <div class="visor-lcd visor-branco" id="urnaTela">
+          <div class="lcd-seu-voto">JUSTIÇA ELEITORAL • BOLETIM DE URNA</div>
+          <div class="lcd-cargo" style="margin-bottom: 14px;">TOTALIZAÇÃO — DEPUTADO FEDERAL</div>
 
           <% if (typeof candidatos !== 'undefined' && candidatos.length > 0) { %>
             <div class="boletim-grade">
@@ -49,25 +53,30 @@
             </div>
           <% } %>
 
-          <div class="lcd-rodape-instrucoes">
-            <div>Para digitar no teclado físico da Urna Eletrônica, acesse <a href="/candidatos" class="link-urna">Urna &amp; Candidatos</a>.</div>
+          <div class="lcd-rodape-instrucoes" style="margin-top: 16px;">
+            <div class="instrucao-cabecalho">Instrução:</div>
+            <div class="instrucao-linha">Para digitar no teclado tátil da Urna Eletrônica, acesse <a href="/candidatos" class="link-urna">Urna &amp; Candidatos</a>.</div>
           </div>
         </div>
+      </div>
+
+      <div class="urna-emboss-inferior" aria-hidden="true">
+        <span>REPÚBLICA FEDERATIVA DO BRASIL • BOLETIM DE APURAÇÃO EM MEMÓRIA</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Seção MVC: Formulário e Tabela de Registro Geral de Votos -->
+<!-- Seção MVC: Formulário e Tabela de Todos os Votos -->
 <section class="secao-dados">
   <div class="cabecalho-secao">
     <div>
       <p class="etiqueta">PADRÃO MVC • HISTÓRICO DE AUDITORIA</p>
-      <h1>Todos os votos registrados</h1>
-      <p class="subtitulo-secao">Registros de votos processados pelo <code>VotoController</code> nesta execução do servidor.</p>
+      <h1>Todos os votos</h1>
+      <p class="subtitulo-secao">Registros de votos feitos nesta execução do servidor (Total: <strong><%= votos.length %></strong>).</p>
     </div>
     <div class="resumo-contador">
-      <span>Total de votos</span>
+      <span>Votos computados</span>
       <strong><%= votos.length %></strong>
     </div>
   </div>
@@ -75,7 +84,7 @@
   <% if (typeof candidatos !== 'undefined' && candidatos.length > 0) { %>
     <section class="painel-voto">
       <form class="form-voto" action="/votos" method="POST">
-        <label for="candidatoId">Registrar voto direto:</label>
+        <label for="candidatoId">Registrar voto rápido:</label>
         <select id="candidatoId" name="candidatoId" required>
           <% candidatos.forEach(candidato => { %>
             <option value="<%= candidato.id %>">Nº <%= candidato.numero %> — <%= candidato.nome %> (<%= candidato.partido %>)</option>
@@ -89,7 +98,7 @@
   <% if (votos.length === 0) { %>
     <div class="vazio">
       Ainda não há votos registrados.<br>
-      <span>Você pode votar usando a <a href="/candidatos">Urna Eletrônica Interativa</a>, o seletor acima ou enviando <code>POST /api/votos</code>.</span>
+      <span>Você pode votar pela <a href="/candidatos">Urna Eletrônica</a>, pelo formulário acima ou usando <code>POST /api/votos</code>.</span>
     </div>
   <% } else { %>
     <div class="tabela-wrap">
@@ -120,5 +129,31 @@
     </div>
   <% } %>
 </section>
+
+<script>
+  const urnaTela = document.getElementById('urnaTela');
+  const btnVisorBranco = document.getElementById('btnVisorBranco');
+  const btnVisorPreto = document.getElementById('btnVisorPreto');
+
+  window.definirModoVisor = function(modo) {
+    if (modo === 'preto') {
+      urnaTela.classList.remove('visor-branco');
+      urnaTela.classList.add('visor-preto');
+      btnVisorPreto.classList.add('ativo');
+      btnVisorBranco.classList.remove('ativo');
+    } else {
+      urnaTela.classList.remove('visor-preto');
+      urnaTela.classList.add('visor-branco');
+      btnVisorBranco.classList.add('ativo');
+      btnVisorPreto.classList.remove('ativo');
+    }
+    try { localStorage.setItem('urnaModoVisor', modo); } catch (e) {}
+  };
+
+  try {
+    const modoSalvo = localStorage.getItem('urnaModoVisor');
+    if (modoSalvo === 'preto') window.definirModoVisor('preto');
+  } catch (e) {}
+</script>
 
 <%- include('partials/footer') %>
