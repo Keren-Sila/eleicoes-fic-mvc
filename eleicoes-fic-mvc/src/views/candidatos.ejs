@@ -1,33 +1,256 @@
 <%- include('partials/header', { titulo: 'Candidatos' }) %>
-<section class="cabecalho">
-  <p class="etiqueta">VISUALIZAÇÃO MVC</p>
-  <h1>Todos os candidatos</h1>
-  <p>Lista de candidatos cadastrados no sistema de eleições fictícias.</p>
+
+<!-- Urna Eletrônica Interativa + Painel de Candidatos -->
+<section class="palco-urna">
+  <div class="urna-carcaca">
+    <!-- Tela LCD Superior -->
+    <div class="urna-moldura-tela">
+      <div class="urna-tela" id="urnaTela">
+        <div class="tela-topo">
+          <div class="brasao-icone" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="34" height="34">
+              <circle cx="32" cy="32" r="28" fill="#1d6b3a" stroke="#f2c94c" stroke-width="3"/>
+              <polygon points="32,10 38,24 53,24 41,33 45,48 32,39 19,48 23,33 11,24 26,24" fill="#f2c94c"/>
+              <circle cx="32" cy="32" r="8" fill="#1e4fa1"/>
+            </svg>
+          </div>
+          <span class="tela-titulo-justica">JUSTIÇA ELEITORAL</span>
+        </div>
+
+        <div class="tela-faixa-azul">Seu voto vai para:</div>
+
+        <div class="tela-quadro-principal">
+          <div class="tela-dados-esq">
+            <div class="tela-cargo">CANDIDATO(A) — ELEIÇÕES FIC</div>
+            <div class="tela-caixas-numero" id="caixasNumero">
+              <span class="digito-caixa piscando" id="digito0"></span>
+              <span class="digito-caixa" id="digito1"></span>
+              <span class="digito-caixa" id="digito2"></span>
+              <span class="digito-caixa" id="digito3"></span>
+            </div>
+            <div class="tela-campos">
+              <p><strong>Nome:</strong> <span id="telaNome">Digite o número no teclado...</span></p>
+              <p><strong>Partido:</strong> <span id="telaPartido">—</span></p>
+              <p class="tela-status" id="telaStatus"></p>
+            </div>
+          </div>
+
+          <div class="tela-avatar-box" id="telaAvatarBox">
+            <svg viewBox="0 0 120 140" class="silhueta-svg" aria-hidden="true">
+              <circle cx="60" cy="46" r="24" fill="#68707a"/>
+              <path d="M16 136 C16 96, 104 96, 104 136 Z" fill="#68707a"/>
+            </svg>
+            <span class="avatar-numero-tag" id="telaAvatarTag">FIC</span>
+          </div>
+        </div>
+
+        <div class="tela-instrucoes">
+          <div>Aperte a tecla:</div>
+          <div><span class="cor-verde">VERDE</span> para CONFIRMAR</div>
+          <div><span class="cor-laranja">LARANJA</span> para CORRIGE</div>
+          <div><strong>BRANCO</strong> para VOTAR EM BRANCO</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Base Inferior: Brasão em relevo + Teclado Físico -->
+    <div class="urna-base-inferior">
+      <div class="urna-relevo-brasao" aria-hidden="true">
+        <div class="relevo-linhas">
+          <svg viewBox="0 0 120 120" width="96" height="96">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(90,94,102,0.32)" stroke-width="2" stroke-dasharray="4 3"/>
+            <polygon points="60,16 71,44 101,44 77,62 86,91 60,73 34,91 43,62 19,44 49,44" fill="none" stroke="rgba(90,94,102,0.38)" stroke-width="2.2"/>
+            <circle cx="60" cy="60" r="16" fill="none" stroke="rgba(90,94,102,0.42)" stroke-width="2"/>
+          </svg>
+          <span>REPÚBLICA FEDERATIVA DO BRASIL</span>
+        </div>
+      </div>
+
+      <div class="urna-teclado-area">
+        <div class="teclado-numerico">
+          <% [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(num => { %>
+            <button type="button" class="tecla-num" data-num="<%= num %>">
+              <span class="tecla-algarismo"><%= num %></span>
+              <span class="tecla-braille">⠿</span>
+            </button>
+          <% }) %>
+          <div class="tecla-vazia"></div>
+          <button type="button" class="tecla-num" data-num="0">
+            <span class="tecla-algarismo">0</span>
+            <span class="tecla-braille">⠿</span>
+          </button>
+          <div class="tecla-vazia"></div>
+        </div>
+
+        <div class="teclado-acoes">
+          <button type="button" class="tecla-acao tecla-branco" id="btnBranco">BRANCO</button>
+          <button type="button" class="tecla-acao tecla-corrige" id="btnCorrige">CORRIGE</button>
+          <button type="button" class="tecla-acao tecla-confirma" id="btnConfirma">CONFIRMA</button>
+        </div>
+      </div>
+    </div>
+
+    <form id="formUrnaVoto" action="/votos" method="POST" style="display:none;">
+      <input type="hidden" name="candidatoId" id="inputCandidatoId" value="">
+    </form>
+  </div>
 </section>
 
-<% if (candidatos.length === 0) { %>
-  <div class="vazio">Nenhum candidato cadastrado.</div>
-<% } else { %>
-  <div class="grade">
-    <% candidatos.forEach(candidato => { %>
-      <article class="cartao">
-        <div class="cartao-topo">
-          <span class="numero">Nº <%= candidato.numero %></span>
-          <span class="placar"><%= candidato.totalVotos || 0 %> <%= (candidato.totalVotos === 1) ? 'voto' : 'votos' %></span>
-        </div>
-        <h2><%= candidato.nome %></h2>
-        <p><%= candidato.partido %></p>
-        <div class="cartao-rodape">
-          <small>ID: <%= candidato.id %></small>
-          <form action="/votos" method="POST">
-            <input type="hidden" name="candidatoId" value="<%= candidato.id %>">
-            <button type="submit" class="botao-votar">Votar</button>
-          </form>
-        </div>
-      </article>
-    <% }) %>
+<!-- Seção MVC de Candidatos Cadastrados (Preservando tudo que já foi feito) -->
+<section class="secao-dados">
+  <div class="cabecalho">
+    <p class="etiqueta">VISUALIZAÇÃO MVC • MODELS, CONTROLLERS & VIEWS</p>
+    <h1>Todos os candidatos</h1>
+    <p>Clique em um candidato abaixo para carregar o número na Urna Eletrônica ou digite o número diretamente no teclado da urna.</p>
   </div>
-<% } %>
 
-<p class="dica">Para cadastrar, alterar ou excluir candidatos via API REST, utilize os endpoints descritos no README ou no arquivo <code>client.http</code>.</p>
+  <% if (candidatos.length === 0) { %>
+    <div class="vazio">Nenhum candidato cadastrado.</div>
+  <% } else { %>
+    <div class="grade">
+      <% candidatos.forEach(candidato => { %>
+        <article class="cartao" data-numero="<%= candidato.numero %>" data-id="<%= candidato.id %>">
+          <div class="cartao-topo">
+            <span class="numero">Nº <%= candidato.numero %></span>
+            <span class="placar"><%= candidato.totalVotos || 0 %> <%= (candidato.totalVotos === 1) ? 'voto' : 'votos' %></span>
+          </div>
+          <h2><%= candidato.nome %></h2>
+          <p><%= candidato.partido %></p>
+          <div class="cartao-rodape">
+            <small>ID: <%= candidato.id %></small>
+            <div class="cartao-botoes">
+              <button type="button" class="botao-testar-urna" onclick="preencherNaUrna('<%= candidato.numero %>')">
+                Testar na Urna (<%= candidato.numero %>)
+              </button>
+              <form action="/votos" method="POST">
+                <input type="hidden" name="candidatoId" value="<%= candidato.id %>">
+                <button type="submit" class="botao-votar">Voto rápido</button>
+              </form>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <p class="dica">Para cadastrar, alterar ou excluir candidatos via API REST, utilize os endpoints descritos no README ou no arquivo <code>client.http</code>.</p>
+</section>
+
+<script id="dadosCandidatosJson" type="application/json"><%- JSON.stringify(candidatos) %></script>
+<script>
+  const listaCandidatos = JSON.parse(document.getElementById('dadosCandidatosJson').textContent || '[]');
+  let digitosAtuais = '';
+  let candidatoSelecionado = null;
+
+  const caixas = [
+    document.getElementById('digito0'),
+    document.getElementById('digito1'),
+    document.getElementById('digito2'),
+    document.getElementById('digito3')
+  ];
+  const telaNome = document.getElementById('telaNome');
+  const telaPartido = document.getElementById('telaPartido');
+  const telaStatus = document.getElementById('telaStatus');
+  const telaAvatarTag = document.getElementById('telaAvatarTag');
+  const inputCandidatoId = document.getElementById('inputCandidatoId');
+  const formUrnaVoto = document.getElementById('formUrnaVoto');
+
+  function tocarBip(frequencia = 880, duracao = 0.08) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = frequencia;
+      gain.gain.value = 0.08;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duracao);
+    } catch (e) {}
+  }
+
+  function atualizarTelaUrna() {
+    caixas.forEach((caixa, idx) => {
+      caixa.textContent = digitosAtuais[idx] || '';
+      caixa.classList.toggle('piscando', idx === digitosAtuais.length && digitosAtuais.length < 4);
+    });
+
+    if (!digitosAtuais) {
+      candidatoSelecionado = null;
+      telaNome.textContent = 'Digite o número no teclado...';
+      telaPartido.textContent = '—';
+      telaStatus.textContent = '';
+      telaAvatarTag.textContent = 'FIC';
+      return;
+    }
+
+    const numeroInt = Number(digitosAtuais);
+    const encontrado = listaCandidatos.find(c => Number(c.numero) === numeroInt);
+
+    if (encontrado) {
+      candidatoSelecionado = encontrado;
+      telaNome.textContent = encontrado.nome;
+      telaPartido.textContent = encontrado.partido;
+      telaStatus.textContent = '✔ Candidato encontrado! Aperte CONFIRMA (verde).';
+      telaStatus.className = 'tela-status status-ok';
+      telaAvatarTag.textContent = 'Nº ' + encontrado.numero;
+    } else {
+      candidatoSelecionado = null;
+      telaNome.textContent = digitosAtuais.length >= 2 ? 'NÚMERO INEXISTENTE' : 'Digitando...';
+      telaPartido.textContent = '—';
+      telaStatus.textContent = digitosAtuais.length >= 2
+        ? 'Candidatos válidos: ' + listaCandidatos.map(c => c.numero).join(', ')
+        : '';
+      telaStatus.className = 'tela-status status-aviso';
+      telaAvatarTag.textContent = '?';
+    }
+  }
+
+  document.querySelectorAll('.tecla-num').forEach(botao => {
+    botao.addEventListener('click', () => {
+      if (digitosAtuais.length < 4) {
+        digitosAtuais += botao.dataset.num;
+        tocarBip(920, 0.06);
+        atualizarTelaUrna();
+      }
+    });
+  });
+
+  document.getElementById('btnCorrige').addEventListener('click', () => {
+    digitosAtuais = '';
+    tocarBip(520, 0.09);
+    atualizarTelaUrna();
+  });
+
+  document.getElementById('btnBranco').addEventListener('click', () => {
+    if (listaCandidatos.length > 0) {
+      digitosAtuais = String(listaCandidatos[0].numero);
+      tocarBip(700, 0.08);
+      atualizarTelaUrna();
+      telaStatus.textContent = 'Sugestão carregada (' + listaCandidatos[0].nome + '). Aperte CONFIRMA ou CORRIGE.';
+    }
+  });
+
+  document.getElementById('btnConfirma').addEventListener('click', () => {
+    if (!candidatoSelecionado) {
+      tocarBip(300, 0.2);
+      telaStatus.textContent = '⚠ Digite um número de candidato válido antes de confirmar (' + listaCandidatos.map(c => c.numero).join(', ') + ').';
+      telaStatus.className = 'tela-status status-aviso';
+      return;
+    }
+    tocarBip(1046, 0.12);
+    setTimeout(() => tocarBip(1318, 0.28), 120);
+    inputCandidatoId.value = candidatoSelecionado.id;
+    formUrnaVoto.submit();
+  });
+
+  window.preencherNaUrna = function(numero) {
+    digitosAtuais = String(numero);
+    tocarBip(980, 0.07);
+    atualizarTelaUrna();
+    document.querySelector('.palco-urna').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+</script>
+
 <%- include('partials/footer') %>

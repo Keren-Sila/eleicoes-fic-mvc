@@ -1,55 +1,100 @@
 <%- include('partials/header', { titulo: 'Votos' }) %>
-<section class="cabecalho">
-  <p class="etiqueta">VISUALIZAÇÃO MVC</p>
-  <h1>Todos os votos</h1>
-  <p>Registros de votos feitos nesta execução do servidor (Total: <strong><%= votos.length %></strong>).</p>
+
+<!-- Painel Estilo Tela da Urna Eletrônica — Boletim de Urna -->
+<section class="palco-urna palco-compacto">
+  <div class="urna-carcaca urna-boletim">
+    <div class="urna-moldura-tela">
+      <div class="urna-tela">
+        <div class="tela-topo">
+          <div class="brasao-icone" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="34" height="34">
+              <circle cx="32" cy="32" r="28" fill="#1d6b3a" stroke="#f2c94c" stroke-width="3"/>
+              <polygon points="32,10 38,24 53,24 41,33 45,48 32,39 19,48 23,33 11,24 26,24" fill="#f2c94c"/>
+              <circle cx="32" cy="32" r="8" fill="#1e4fa1"/>
+            </svg>
+          </div>
+          <span class="tela-titulo-justica">JUSTIÇA ELEITORAL — APURAÇÃO DE VOTOS</span>
+        </div>
+
+        <div class="tela-faixa-azul">Boletim de Urna — Total de votos computados: <%= votos.length %></div>
+
+        <% if (typeof candidatos !== 'undefined' && candidatos.length > 0) { %>
+          <div class="boletim-grade">
+            <% candidatos.forEach(candidato => { %>
+              <div class="boletim-item">
+                <span class="boletim-num">Nº <%= candidato.numero %></span>
+                <div class="boletim-info">
+                  <strong><%= candidato.nome %></strong>
+                  <small><%= candidato.partido %></small>
+                </div>
+                <span class="boletim-votos"><%= candidato.totalVotos || 0 %> <%= (candidato.totalVotos === 1) ? 'voto' : 'votos' %></span>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <div class="tela-instrucoes">
+          <div>Para digitar no teclado numérico da Urna, acesse <a href="/candidatos" class="link-urna">Candidatos (Urna Interativa)</a> ou registre abaixo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<% if (typeof candidatos !== 'undefined' && candidatos.length > 0) { %>
-  <section class="painel-voto">
-    <form class="form-voto" action="/votos" method="POST">
-      <label for="candidatoId">Registrar novo voto:</label>
-      <select id="candidatoId" name="candidatoId" required>
-        <% candidatos.forEach(candidato => { %>
-          <option value="<%= candidato.id %>">Nº <%= candidato.numero %> — <%= candidato.nome %> (<%= candidato.partido %>)</option>
-        <% }) %>
-      </select>
-      <button type="submit" class="botao-votar">Confirmar voto</button>
-    </form>
-  </section>
-<% } %>
+<section class="secao-dados">
+  <div class="cabecalho">
+    <p class="etiqueta">VISUALIZAÇÃO MVC</p>
+    <h1>Todos os votos</h1>
+    <p>Registros de votos feitos nesta execução do servidor (Total: <strong><%= votos.length %></strong>).</p>
+  </div>
 
-<% if (votos.length === 0) { %>
-  <div class="vazio">
-    Ainda não há votos registrados.<br>
-    <span>Você pode registrar um voto pelo formulário acima ou usando <code>POST /api/votos</code>.</span>
-  </div>
-<% } else { %>
-  <div class="tabela-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>ID do voto</th>
-          <th>Candidato</th>
-          <th>Número</th>
-          <th>Partido</th>
-          <th>ID do candidato</th>
-          <th>Data e hora</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% votos.forEach(voto => { %>
+  <% if (typeof candidatos !== 'undefined' && candidatos.length > 0) { %>
+    <section class="painel-voto">
+      <form class="form-voto" action="/votos" method="POST">
+        <label for="candidatoId">Registrar novo voto:</label>
+        <select id="candidatoId" name="candidatoId" required>
+          <% candidatos.forEach(candidato => { %>
+            <option value="<%= candidato.id %>">Nº <%= candidato.numero %> — <%= candidato.nome %> (<%= candidato.partido %>)</option>
+          <% }) %>
+        </select>
+        <button type="submit" class="botao-votar">CONFIRMA VOTO</button>
+      </form>
+    </section>
+  <% } %>
+
+  <% if (votos.length === 0) { %>
+    <div class="vazio">
+      Ainda não há votos registrados.<br>
+      <span>Você pode votar na <a href="/candidatos">Urna Eletrônica</a>, pelo formulário acima ou usando <code>POST /api/votos</code>.</span>
+    </div>
+  <% } else { %>
+    <div class="tabela-wrap">
+      <table>
+        <thead>
           <tr>
-            <td>#<%= voto.id %></td>
-            <td><strong><%= voto.candidatoNome %></strong></td>
-            <td>Nº <%= voto.candidatoNumero %></td>
-            <td><%= voto.candidatoPartido %></td>
-            <td><%= voto.candidatoId %></td>
-            <td><%= voto.dataFormatada %></td>
+            <th>ID do voto</th>
+            <th>Candidato</th>
+            <th>Número</th>
+            <th>Partido</th>
+            <th>ID do candidato</th>
+            <th>Data e hora</th>
           </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </div>
-<% } %>
+        </thead>
+        <tbody>
+          <% votos.forEach(voto => { %>
+            <tr>
+              <td>#<%= voto.id %></td>
+              <td><strong><%= voto.candidatoNome %></strong></td>
+              <td>Nº <%= voto.candidatoNumero %></td>
+              <td><%= voto.candidatoPartido %></td>
+              <td><%= voto.candidatoId %></td>
+              <td><%= voto.dataFormatada %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
 <%- include('partials/footer') %>
