@@ -1,4 +1,4 @@
-# ⚖️ Eleições FIC MVC — Simulador de Urna Eletrônica (Exercícios 1 e 2)
+# ⚖️ Eleições FIC MVC — Simulador de Urna Eletrônica 
 
 Projeto didático desenvolvido para a disciplina de Node.js (**UC01 - Padrão MVC**). Utiliza **Node.js**, **Express**, **ES Modules (`import`/`export`)**, **arquitetura MVC** e **EJS** para renderização de views com interface de **Urna Eletrônica** e **Boletim de Urna**.
 
